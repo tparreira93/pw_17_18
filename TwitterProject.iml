@@ -10,5 +10,6 @@
     <orderEntry type="library" name="lucene" level="application" />
     <orderEntry type="library" name="twitter4j" level="application" />
     <orderEntry type="library" name="jChart" level="application" />
+    <orderEntry type="library" name="JSON" level="application" />
   </component>
 </module>

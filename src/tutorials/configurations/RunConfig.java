@@ -10,14 +10,12 @@ import java.util.List;
 import java.util.UUID;
 
 public class RunConfig {
-    AnalyzerConfiguration analyzerConfiguration;
-    Similarity similarityConfiguration;
-    Boolean index;
-    Expand expand;
-    String indexPath;
-    UUID id;
-
-    String name;
+    private AnalyzerConfiguration analyzerConfiguration;
+    private Similarity similarityConfiguration;
+    private Boolean index;
+    private Expand expand;
+    private UUID id;
+    private String name;
 
     public RunConfig(String name) {
         analyzerConfiguration = new AnalyzerConfiguration();
@@ -26,6 +24,10 @@ public class RunConfig {
         index = false;
         id = UUID.randomUUID();
         this.name = name;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
@@ -65,16 +67,12 @@ public class RunConfig {
         return TestAnalyzer.getAnalyzer(this);
     }
 
-    public void setAnalyzerConfiguration(AnalyzerConfiguration analyzerConfiguration) {
-        this.analyzerConfiguration = analyzerConfiguration;
-    }
-
     public Similarity getSimilarityConfiguration() {
         return similarityConfiguration;
     }
 
-    public void setSimilarityConfigurations(Similarity similarityConfigurations) {
-        this.similarityConfiguration = similarityConfiguration;
+    public void setSimilarityConfigurations(Similarity sim) {
+        this.similarityConfiguration = sim;
     }
 
 }

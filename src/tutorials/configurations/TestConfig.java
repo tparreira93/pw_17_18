@@ -6,15 +6,12 @@ import java.util.List;
 public class TestConfig {
     private String fileName;
     private List<RunConfig> configs;
-
-    public TestConfig(String fileName, List<RunConfig> configs) {
-        this.fileName = fileName;
-        this.configs = configs;
-    }
+    private String query;
 
     public TestConfig() {
         fileName = "";
         configs = new ArrayList<>();
+        query = "";
     }
 
 
@@ -30,7 +27,11 @@ public class TestConfig {
         return configs;
     }
 
-    public void setConfigs(List<RunConfig> configs) {
-        this.configs = configs;
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
     }
 }
