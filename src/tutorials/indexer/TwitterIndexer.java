@@ -9,18 +9,15 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
-import org.apache.lucene.search.similarities.*;
+import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import tutorials.configurations.Expand;
-import tutorials.configurations.RunConfig;
+import tutorials.configurations.Ranker;
 import tutorials.utils.*;
-import twitter4j.Scopes;
 import twitter4j.Status;
 
-import javax.print.Doc;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -28,30 +25,26 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class TwitterIndexer {
-	private String queriesPath = "queries.offline.txt";
-
 	public final static int TOP = 100;
 	private final static int TOPDOCS = 25;
 	public final static int NUMDOCS = 10;
 	private final static int NUM_TOP_WORDS = 5;
 
 	private Map<LocalDate, IndexWriter> indexes = new HashMap<>();
-	private List<DataSetTrec> trecs;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private DateTimeFormatter formatter;
-	public TwitterIndexer(List<DataSetTrec> t, LocalDate startDate, LocalDate endDate) {
-		this.trecs = t;
+	public TwitterIndexer(LocalDate startDate, LocalDate endDate) {
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		this.formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 	}
 
-	private String getPath(RunConfig config, LocalDate date) {
+	private String getPath(Ranker config, LocalDate date) {
 		return config.getIndexPath() + "\\" + date.format(formatter);
 	}
 
-	public void openIndex(RunConfig config) {
+	public void openIndex(Ranker config) {
 		try {
 
 			indexes.clear();
@@ -108,10 +101,9 @@ public class TwitterIndexer {
 			doc.add(new LongPoint("Id", status.getId()));
 			doc.add(new StoredField("Id", status.getId()));
 			doc.add(new LongPoint("UserId", status.getUser().getId()));
-
-			doc.add(new LongPoint("CreationDate", status.getCreatedAt().getTime()));
-
+			doc.add(new StringField("CreationDate", formatter.format(status.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()), Field.Store.YES));
 			doc.add(new TextField("Body", status.getText(), Field.Store.YES));
+
 			LocalDate date = status.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 			for (Map.Entry<LocalDate, IndexWriter> entry : indexes.entrySet()) {
 				LocalDate indexDate = entry.getKey();
@@ -140,21 +132,16 @@ public class TwitterIndexer {
 
 	// ====================================================
 	// ANNOTATE THIS METHOD YOURSELF
-	public void indexSearch(RunConfig config, List<JSONProfile> profiles) {
+	public void indexSearch(Ranker config, List<JSONProfile> profiles) {
 		Set<LocalDate> dates = indexes.keySet();
 		for (LocalDate date : dates) {
-			DataSetTrec trec = search(config, date, profiles);
-
-			trecs.add(trec);
+			search(config, date, profiles);
 		}
 	}
 
-	private DataSetTrec search(RunConfig config, LocalDate date, List<JSONProfile> profiles) {
+	private void search(Ranker config, LocalDate date, List<JSONProfile> profiles) {
 		Analyzer analyzer = config.getAnalyzer();
 		Similarity similarity = config.getSimilarityConfiguration();
-		Expand expand = config.getExpand();
-		DataSetTrec trec = null;
-		String resultsFiles = config.getIndexPath() + "\\results" + ".txt";
 		IndexReader reader = null;
 		IndexSearcher searcher;
 		try {
@@ -179,12 +166,12 @@ public class TwitterIndexer {
 						Integer Id = doc.getField("Id").numericValue().intValue();
 						resultsDocs.add(new ResultDocs(profile.getTopicID(), Id, sc.score, doc));
 					}
+
+					config.setResults(resultsDocs);
 				} catch (org.apache.lucene.queryparser.classic.ParseException e) {
 					System.out.println("Error parsing query string.");
 				}
 			}
-
-			trec = createTrec(analyzer, similarity, resultsFiles, resultsDocs, expand);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -197,8 +184,6 @@ public class TwitterIndexer {
 				e1.printStackTrace();
 			}
 		}
-
-		return trec;
 	}
 
 	private List<ScoreDoc> nearDuplicateDetection(List<ScoreDoc> scoreDocs) {
@@ -207,76 +192,6 @@ public class TwitterIndexer {
 
 	private List<ScoreDoc> reorderTweets(List<ScoreDoc> scoreDocs) {
 		return scoreDocs;
-	}
-
-	private DataSetTrec createTrec(Analyzer analyzer, Similarity similarity, String resultsFiles,
-								   List<ResultDocs> resultsDocs,
-								   Expand expand) {
-		String tmp = analyzer.toString() + "@" + similarity.toString();
-		if(expand.isExpand())
-			tmp += " with expansion (alfa=" + Math.round(expand.getWeight()*100f)/100f + ")";
-		else
-			tmp += " no expansion";
-		DataSetTrec t = new DataSetTrec(tmp);
-
-		BufferedWriter out = null;
-		StringBuilder result = new StringBuilder();
-		Collections.sort(resultsDocs);
-
-		String q = ResultDocs.CONST_QO;
-		String run = ResultDocs.CONST_RUN;
-		for (ResultDocs r : resultsDocs) {
-			result.append(r.getQueryId()).append(" ").append(q).append(" ").append(r.getDocId()).append(" ").append(r.getRank()).append(" ").append(r.getScore()).append(" ").append(run).append("\n");
-		}
-
-		try {
-			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(resultsFiles)));
-			out.write(result.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (out != null) {
-					out.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-
-		CommandLine c = new CommandLine();
-		String resultTrec = c.executeCommand("trec_eval.exe qrels.offline.txt " + resultsFiles);
-
-		BufferedReader bufReader = new BufferedReader(new StringReader(resultTrec));
-
-		String l;
-		System.out.println(tmp);
-		System.out.println(resultTrec);
-		try {
-			while ((l = bufReader.readLine()) != null) {
-
-                String[] values = l.split("\\s+");
-                String k = values[0];
-                if (k.equals("map")) {
-                    String[] a = l.split("\\s+");
-                    t.setMap(Float.parseFloat(a[a.length - 1]));
-                }
-
-                if (k.contains("iprec")) {
-                    t.addRecall(values[0].split("_")[3], Float.parseFloat(values[values.length - 1]));
-                }
-
-                if (k.contains("P_")) {
-                    t.addPage(values[0].split("_")[1], Float.parseFloat(values[values.length - 1]));
-                }
-
-            }
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return t;
 	}
 
 	public void close() {
@@ -294,15 +209,16 @@ public class TwitterIndexer {
 	private Query createQuery(String queryText, LocalDate date, Expand expand, Analyzer analyzer, IndexSearcher searcher) throws ParseException {
 		Query query;
 		QueryParser parser;
+
 		BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
+		queryBuilder.add(new TermQuery(new Term("CreationDate", formatter.format(date))), BooleanClause.Occur.MUST);
 		if (expand.isExpand())
 			queryBuilder.add(expandQuery(queryText, searcher, analyzer, expand.getWeight()), BooleanClause.Occur.SHOULD);
 		else {
 			parser = new QueryParser("Body", analyzer);
 			queryBuilder.add(parser.parse(queryText), BooleanClause.Occur.SHOULD);
 		}
-		//parser = new QueryParser("CreationDate", analyzer);
-		//queryBuilder.add(parser.parse(date.format(formatter)), BooleanClause.Occur.MUST);
+
 		query = queryBuilder.build();
 
 		return query;
@@ -337,24 +253,6 @@ public class TwitterIndexer {
 		return query;
 	}
 
-	public void writeCSV(List<DataSetTrec> t, String csvFile) throws IOException {
-		FileWriter writer = new FileWriter(csvFile);
-
-		CSVUtils.writeLine(writer, Arrays.asList("Filter", "map"));
-
-		// custom separator + quote
-		for (DataSetTrec d : t) {
-			CSVUtils.writeLine(writer, Arrays.asList(d.getFilter(), String.valueOf(d.getMap())));
-		}
-
-		writer.flush();
-		writer.close();
-	}
-
-	public List<DataSetTrec> getTrecs() {
-		return trecs;
-	}
-
 	private Map<String, Integer> sortByValue(Map<String, Integer> unsortMap) {
 
 		// 1. Convert Map to List of Map
@@ -371,7 +269,7 @@ public class TwitterIndexer {
 
 	private List<ResultDocs> parseScoreDocs(IndexSearcher searcher, ScoreDoc[] scores)
 	{
-		List<ResultDocs> resultsDocs = new LinkedList<ResultDocs>();
+		List<ResultDocs> resultsDocs = new LinkedList<>();
 
 		for (ScoreDoc c : scores) {
 			try {
@@ -391,7 +289,7 @@ public class TwitterIndexer {
 	private Map<String, Integer> getExpansionTerms(IndexSearcher searcher, String queryString, int numExpDocs,
 												   Analyzer analyzer) {
 
-		Map<String, Integer> topTerms = new HashMap<String, Integer>();
+		Map<String, Integer> topTerms = new HashMap<>();
 
 		try {
 			QueryParser parser = new QueryParser("Body", analyzer);
@@ -411,7 +309,7 @@ public class TwitterIndexer {
 
 			TokenStream stream = analyzer.tokenStream("field", new StringReader(queryString));
 			CharTermAttribute termAtt = stream.addAttribute(CharTermAttribute.class);
-			Map<String, Integer> queryTerms = new HashMap<String, Integer>();
+			Map<String, Integer> queryTerms = new HashMap<>();
 			try {
 				stream.reset();
 				while (stream.incrementToken()) {

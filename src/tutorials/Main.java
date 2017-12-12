@@ -5,123 +5,107 @@ import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.search.similarities.LMDirichletSimilarity;
 import org.apache.lucene.search.similarities.LMJelinekMercerSimilarity;
 import org.jfree.ui.RefineryUtilities;
-import org.junit.Test;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import tutorials.configurations.AnalyzerConfiguration;
 import tutorials.configurations.Expand;
-import tutorials.configurations.RunConfig;
+import tutorials.configurations.Ranker;
 import tutorials.configurations.TestConfig;
 import tutorials.indexer.TwitterIndexer;
+import tutorials.rank.MultiRanker;
+import tutorials.rank.RankFusion;
 import tutorials.twitter.TwitterReader;
-import tutorials.utils.DataSetTrec;
-import tutorials.utils.JSONProfile;
-import tutorials.utils.LineChart;
+import tutorials.utils.*;
 import twitter4j.Status;
 import twitter4j.TwitterException;
-import org.json.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-
         TestConfig testConfig = parseConfig(args);
-        if (!validateTest(testConfig)) {
-            return;
-        }
-
-        List<RunConfig> configs = testConfig.getConfigs();
-        List<DataSetTrec> trecs = new LinkedList<>();
-        List<JSONProfile> interestProfiles;
-        TwitterIndexer baseline = new TwitterIndexer(trecs, LocalDate.parse("2016-08-02"), LocalDate.parse("2016-08-11"));
-        boolean loadTweets = false;
-        List<Status> tweets = new ArrayList<>();
-        for (RunConfig config : configs) {
-            if (config.createIndex()) {
-                loadTweets = true;
-                break;
-            }
-        }
-
-        if (loadTweets) {
-            tweets = loadTweets(testConfig.getFileName());
-        }
-        try {
-            interestProfiles = readProfiles(testConfig.getQuery());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        for (RunConfig config : configs) {
-            if (config.createIndex()) {
-                baseline.openIndex(config);
-                baseline.indexTweets(tweets);
-                baseline.close();
-            }
-
-            baseline.indexSearch(config, interestProfiles);
-        }
-
-        LineChart chart = new LineChart("filters", "Precision x Documents", String.valueOf(TwitterIndexer.NUMDOCS), trecs,
-                'p');
-        chart.pack();
-        RefineryUtilities.centerFrameOnScreen(chart);
-        chart.setVisible(true);
-        LineChart chart2 = new LineChart("filters", "Precision x Recall", String.valueOf(TwitterIndexer.NUMDOCS), trecs, 'r');
-        chart2.pack();
-        RefineryUtilities.centerFrameOnScreen(chart2);
-        chart2.setVisible(true);
-
-        try {
-            baseline.writeCSV(trecs, "abc.csv");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static boolean validateTest(TestConfig testConfig) {
-        if (testConfig == null
-                || testConfig.getFileName().isEmpty()
-                || testConfig.getConfigs().size() == 0) {
+        if (testConfig == null || !testConfig.verboseValidate()) {
             printUsage();
-            return false;
-        }
-        for (RunConfig config : testConfig.getConfigs()) {
-            if (!validateConfig(config)) {
-                printUsage();
-                return false;
-            }
+            return;
         }
 
-        return true;
+        try {
+            List<MultiRanker> multiRankers = testConfig.getMultiRankers();
+            List<DataSetTrec> trecs = new LinkedList<>();
+            List<JSONProfile> interestProfiles;
+            TwitterIndexer baseline = new TwitterIndexer(LocalDate.parse("2016-08-02"), LocalDate.parse("2016-08-11"));
+            List<Status> tweets = new ArrayList<>();
+
+            try {
+                if (testConfig.loadTweets()) {
+                    tweets = loadTweets(testConfig.getFileName());
+                }
+                interestProfiles = readProfiles(testConfig.getQuery());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+
+            for (MultiRanker multiRanker : multiRankers) {
+                for (Ranker ranker : multiRanker.getRankers()) {
+                    if (ranker.createIndex()) {
+                        baseline.openIndex(ranker);
+                        baseline.indexTweets(tweets);
+                        baseline.close();
+                    }
+
+                    baseline.indexSearch(ranker, interestProfiles);
+                }
+                RankFusion fusion = new RankFusion();
+                List<ResultDocs> fused = fusion.Fuse(multiRanker);
+                multiRanker.createTrec("tmp.txt", fused);
+            }
+
+            plotTrecs(trecs);
+            writeCSV(trecs, "abc.csv");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private static boolean validateConfig(RunConfig config) {
-        boolean valid = true;
-        if(config.getAnalyzer() == null)
-        {
-            System.out.println("Analyzer must be specified.");
-            valid = false;
-        }
-        if(config.getSimilarityConfiguration() == null)
-        {
-            System.out.println("Similarity must be specified.");
-            valid = false;
-        }
-        if(config.getExpand() == null)
-        {
-            System.out.println("Expansion must be defined.");
-            valid = false;
+    private static void writeCSV(List<DataSetTrec> t, String csvFile) throws IOException {
+        FileWriter writer = new FileWriter(csvFile);
+
+        CSVUtils.writeLine(writer, Arrays.asList("Filter", "map"));
+
+        // custom separator + quote
+        for (DataSetTrec d : t) {
+            CSVUtils.writeLine(writer, Arrays.asList(d.getFilter(), String.valueOf(d.getMap())));
         }
 
-        return valid;
+        writer.flush();
+        writer.close();
+    }
+
+    private static void plotTrecs(List<DataSetTrec> trecs) {
+        plot("filters", "Precision x Documents",
+                String.valueOf(TwitterIndexer.NUMDOCS), trecs,
+                'p');
+
+        plot("filters", "Precision x Recall",
+                String.valueOf(TwitterIndexer.NUMDOCS),
+                trecs, 'r');
+    }
+
+    private static void plot(String applicationTitle, String chartTitle, String sub, List<DataSetTrec> trecs, char type) {
+        LineChart lineChart = new LineChart(applicationTitle, chartTitle, sub, trecs, type);
+        lineChart.pack();
+        RefineryUtilities.centerFrameOnScreen(lineChart);
+        lineChart.setVisible(true);
     }
 
     private static String readFile(String filename) throws IOException {
@@ -167,12 +151,15 @@ public class Main {
     }
 
     private static void printUsage() {
-        System.out.println("web search - Project 1\n");
+        System.out.println("web search - Project\n");
         System.out.println("Usage example:");
-        System.out.println("[(-h|--help)] -f name -q name -r [index (filter string)] -r [index (filter string)] ....");
+        System.out.println("[(-h|--help)] -f name -q name (-fuse | -nofuse) -r [index (filter string)] (-fuse | -nofuse) -r [index (filter string)] ....");
         System.out.println("-f: Twitter JSON");
-        System.out.println("-f: Queries JSON");
         System.out.println("\t filename");
+        System.out.println("-q: Queries JSON");
+        System.out.println("\t filename");
+        System.out.println("-fuse: Fuse following ranks");
+        System.out.println("-nofuse: No fusion for following ranks");
         System.out.println("-r [index (filter string)]:");
         System.out.println("-index: Create index");
         System.out.println("Filter:");
@@ -204,17 +191,12 @@ public class Main {
 
     private static TestConfig parseConfig(String[] args) {
         TestConfig testConfig = new TestConfig();
-        List<RunConfig> configs = testConfig.getConfigs();
-        RunConfig runConfig = null;
+        Ranker ranker = null;
+        MultiRanker multiRanker = new MultiRanker();
+        Boolean fuse = false;
         try {
             for (int i = 0; i < args.length; i++) {
                 switch (args[i]) {
-                    case "-r":
-                        if (args.length - i >= 1) {
-                            runConfig = new RunConfig(args[++i]);
-                            configs.add(runConfig);
-                        }
-                        break;
                     case "-f":
                         if (args.length - i >= 1) {
                             testConfig.setFileName(args[++i]);
@@ -225,50 +207,92 @@ public class Main {
                             testConfig.setQuery(args[++i]);
                         }
                         break;
+                    case "-fuse":
+                        fuse = true;
+                        multiRanker = new MultiRanker();
+                        testConfig.addRanker(multiRanker);
+                        break;
+                    case "-nofuse":
+                        fuse = false;
+                        break;
+                    case "-r":
+                        if (args.length - i >= 1) {
+                            ranker = new Ranker(args[++i]);
+                            if (fuse) {
+                                multiRanker.addRanker(ranker);
+                            } else {
+                                multiRanker = new MultiRanker();
+                                multiRanker.addRanker(ranker);
+                                testConfig.addRanker(multiRanker);
+                            }
+                        }
+                        break;
                     case "-index":
-                        runConfig.setIndex(true);
+                        if (ranker != null) {
+                            ranker.setIndex(true);
+                        }
                         break;
                     case "-sf":
-                        runConfig.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.StopFilter);
+                        if (ranker != null) {
+                            ranker.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.StopFilter);
+                        }
                         break;
                     case "-shf":
                         if (args.length - i - 1 >= 2) {
-                            runConfig.getAnalyzerConfiguration().setMinShingleSize(Integer.parseInt(args[++i]));
-                            runConfig.getAnalyzerConfiguration().setMaxShingleSize(Integer.parseInt(args[++i]));
-                            runConfig.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.ShingleFilter);
+                            if (ranker != null) {
+                                ranker.getAnalyzerConfiguration().setMinShingleSize(Integer.parseInt(args[++i]));
+                                ranker.getAnalyzerConfiguration().setMaxShingleSize(Integer.parseInt(args[++i]));
+                                ranker.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.ShingleFilter);
+                            }
                         }
                         break;
                     case "-snf":
-                        runConfig.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.SnowballFilter);
+                        if (ranker != null) {
+                            ranker.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.SnowballFilter);
+                        }
                         break;
                     case "-stdf":
-                        runConfig.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.StandardFilter);
+                        if (ranker != null) {
+                            ranker.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.StandardFilter);
+                        }
                         break;
                     case "-lcf":
-                        runConfig.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.LowerCaseFilter);
+                        if (ranker != null) {
+                            ranker.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.LowerCaseFilter);
+                        }
                         break;
                     case "-ngtf":
                         if (args.length - i >= 2) {
-                            runConfig.getAnalyzerConfiguration().setMinGram(Integer.parseInt(args[++i]));
-                            runConfig.getAnalyzerConfiguration().setMaxGram(Integer.parseInt(args[++i]));
-                            runConfig.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.NGramTokenFilter);
+                            if (ranker != null) {
+                                ranker.getAnalyzerConfiguration().setMinGram(Integer.parseInt(args[++i]));
+                                ranker.getAnalyzerConfiguration().setMaxGram(Integer.parseInt(args[++i]));
+                                ranker.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.NGramTokenFilter);
+                            }
                         }
                         break;
                     case "-cgf":
-                        runConfig.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.CommonGramsFilter);
+                        if (ranker != null) {
+                            ranker.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.CommonGramsFilter);
+                        }
                         break;
                     case "-wt":
-                        runConfig.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.WhitespaceTokenizer);
+                        if (ranker != null) {
+                            ranker.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.WhitespaceTokenizer);
+                        }
                         break;
                     case "-edgtf":
                         if (args.length - i >= 2) {
-                            runConfig.getAnalyzerConfiguration().setMinGram(Integer.parseInt(args[++i]));
-                            runConfig.getAnalyzerConfiguration().setMaxGram(Integer.parseInt(args[++i]));
-                            runConfig.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.EdgeNGramTokenFilter);
+                            if (ranker != null) {
+                                ranker.getAnalyzerConfiguration().setMinGram(Integer.parseInt(args[++i]));
+                                ranker.getAnalyzerConfiguration().setMaxGram(Integer.parseInt(args[++i]));
+                                ranker.getAnalyzerConfiguration().getFilters().add(AnalyzerConfiguration.AnalyzerFilters.EdgeNGramTokenFilter);
+                            }
                         }
                         break;
                     case "-classic":
-                        runConfig.setSimilarityConfigurations(new ClassicSimilarity());
+                        if (ranker != null) {
+                            ranker.setSimilarityConfigurations(new ClassicSimilarity());
+                        }
                         break;
                     case "-bm25":
                         float k1 = 1.2f;
@@ -277,35 +301,44 @@ public class Main {
                             k1 = Float.parseFloat(args[++i]);
                             b = Float.parseFloat(args[++i]);
                         }
-                        runConfig.setSimilarityConfigurations(new BM25Similarity(k1, b));
+                        if (ranker != null) {
+                            ranker.setSimilarityConfigurations(new BM25Similarity(k1, b));
+                        }
                         break;
                     case "-lmd":
                         float mu = 2000f;
                         if (args.length - i >= 1) {
                             mu = Float.parseFloat(args[++i]);
                         }
-                        runConfig.setSimilarityConfigurations(new LMDirichletSimilarity(mu));
+                        if (ranker != null) {
+                            ranker.setSimilarityConfigurations(new LMDirichletSimilarity(mu));
+                        }
                         break;
                     case "-lmjm":
                         float lambda = 0.5f;
                         if (args.length - i >= 1) {
                             lambda = Float.parseFloat(args[++i]);
                         }
-                        runConfig.setSimilarityConfigurations(new LMJelinekMercerSimilarity(lambda));
+                        if (ranker != null) {
+                            ranker.setSimilarityConfigurations(new LMJelinekMercerSimilarity(lambda));
+                        }
                         break;
                     case "-expand":
                         Expand exp = new Expand(0.5, true);
                         if (args.length - i >= 1) {
                             exp.setWeight(Float.parseFloat(args[++i]));
-                            runConfig.setExpand(exp);
+                            if (ranker != null) {
+                                ranker.setExpand(exp);
+                            }
                         }
                         break;
                     case "-noexpand":
-                        runConfig.setExpand(new Expand(0, false));
+                        if (ranker != null) {
+                            ranker.setExpand(new Expand(0, false));
+                        }
                         break;
                     case "-h":
                     case "--help":
-                    default:
                         return null;
                 }
             }

@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d204b987-675e-408f-b009-65b0ed82f76a" name="Default" comment="Necessário fazer referência a org.json. Adicionar .jar.&#10;Simplificado a leitura dos argumentos.&#10;Leitura dos tweets.&#10;Criação de indexes para cada dia com os tweets dos dias anteriores.&#10;Leitura dos profiles.&#10;Pesquisa dos profiles nos tweets, utilizando o index do dia correto.&#10;Necessário filtrar o index para não obter tweets de dias anteriores.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/tutorials/utils/JSONProfile.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/indexer/TwitterIndexer$1.class" afterPath="" />
+    <list default="true" id="d204b987-675e-408f-b009-65b0ed82f76a" name="Default" comment="Refactorizado código para funções.&#10;Adicionado a configuração para fazer rank fusion(ainda não implementado)&#10;Pesquisa por tweets só do próprio dia.&#10;TODO:&#10;- Melhorar query expansion.&#10;- K-Means (Information diversity).&#10;- Near duplicate removal (Jaccard).&#10;- Rank fusion.&#10;&#10;Um exemplo de argumentos que o programa recebe (-h mostra uma lista de argumentos suportados):&#10;-f&#10;E:\datasets\rts2016-qrels-tweets2016.jsonl&#10;-q&#10;&quot;E:\datasets\TREC2016-RTS-topics.json&quot;&#10;-fuse&#10;-r&#10;&quot;StopFilter&quot;&#10;-sf&#10;-bm25&#10;1.2&#10;0.75&#10;-index&#10;-r&#10;&quot;Standard filter&quot;&#10;-stdf&#10;-bm25&#10;1.2&#10;0.75&#10;-index">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/tutorials/rank/RankFusion.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/configurations/RunConfig.class" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/tutorials/configurations/RunConfig.java" afterPath="$PROJECT_DIR$/src/tutorials/configurations/Ranker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/Main.class" afterPath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/configurations/RunConfig.class" afterPath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/configurations/RunConfig.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/analyzer/TestAnalyzer.class" afterPath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/analyzer/TestAnalyzer.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/configurations/TestConfig.class" afterPath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/configurations/TestConfig.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/indexer/TwitterIndexer.class" afterPath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/indexer/TwitterIndexer.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/utils/ResultDocs.class" afterPath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/utils/ResultDocs.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TwitterProject.iml" afterPath="$PROJECT_DIR$/TwitterProject.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/Main.java" afterPath="$PROJECT_DIR$/src/tutorials/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/configurations/RunConfig.java" afterPath="$PROJECT_DIR$/src/tutorials/configurations/RunConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/analyzer/TestAnalyzer.java" afterPath="$PROJECT_DIR$/src/tutorials/analyzer/TestAnalyzer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java" afterPath="$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java" afterPath="$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java" afterPath="$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,60 +36,51 @@
       <file leaf-file-name="TwitterIndexer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="299" column="14" lean-forward="true" selection-start-line="299" selection-start-column="14" selection-end-line="299" selection-end-column="14" />
+            <state relative-caret-position="333">
+              <caret line="361" column="33" lean-forward="true" selection-start-line="361" selection-start-column="33" selection-end-line="361" selection-end-column="33" />
               <folding>
-                <element signature="e#2632#2667#0" expanded="false" />
-                <element signature="e#4263#4318#0" expanded="false" />
-                <element signature="method#createTrec#0;class#TwitterIndexer#0" expanded="false" />
-                <element signature="method#writeCSV#0;class#TwitterIndexer#0" expanded="false" />
+                <element signature="e#1501#1502#0" expanded="true" />
+                <element signature="e#1568#1569#0" expanded="true" />
+                <element signature="e#2412#2447#0" expanded="false" />
+                <element signature="e#4126#4181#0" expanded="false" />
+                <element signature="method#close#0;class#TwitterIndexer#0" expanded="false" />
+                <element signature="method#expandQuery#0;class#TwitterIndexer#0" expanded="false" />
                 <element signature="method#sortByValue#0;class#TwitterIndexer#0" expanded="false" />
-                <element signature="method#parseScoreDocs#0;class#TwitterIndexer#0" expanded="false" />
-                <element signature="e#11934#11946#0" expanded="true" />
-                <element signature="method#getExpansionTerms#0;class#TwitterIndexer#0" expanded="false" />
-                <element signature="e#12467#12484#0" expanded="true" />
-                <element signature="e#13179#13196#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LongPoint.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/document/LongPoint.class">
+      <file leaf-file-name="StatusJSONImpl.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/../../twitter4j-4.0.4/lib/twitter4j-core-4.0.4.jar!/twitter4j/StatusJSONImpl.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1064">
-              <caret line="68" column="11" lean-forward="false" selection-start-line="68" selection-start-column="11" selection-end-line="68" selection-end-column="11" />
+            <state relative-caret-position="162">
+              <caret line="259" column="0" lean-forward="false" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
+              <folding>
+                <element signature="e#10594#10595#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CSVUtils.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/tutorials/utils/CSVUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="76">
+              <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Field.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/document/Field.class">
+      <file leaf-file-name="MultiRanker.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="27" column="14" lean-forward="false" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Status.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/../../twitter4j-4.0.4/lib/twitter4j-core-4.0.4.jar!/twitter4j/Status.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="11" column="9" lean-forward="false" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IndexSearcher.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/search/IndexSearcher.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3458">
-              <caret line="247" column="0" lean-forward="false" selection-start-line="247" selection-start-column="0" selection-end-line="247" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="173">
+              <caret line="42" column="23" lean-forward="false" selection-start-line="42" selection-start-column="23" selection-end-line="42" selection-end-column="23" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -103,33 +97,30 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RunConfig.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/RunConfig.java">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/tutorials/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="54" column="0" lean-forward="false" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+            <state relative-caret-position="173">
+              <caret line="103" column="36" lean-forward="false" selection-start-line="103" selection-start-column="36" selection-end-line="103" selection-end-column="36" />
               <folding>
-                <element signature="method#RunConfig#0;class#RunConfig#0" expanded="false" />
-                <element signature="e#1000#1001#0" expanded="true" />
-                <element signature="e#1043#1044#0" expanded="true" />
-                <element signature="e#1246#1247#0" expanded="true" />
-                <element signature="e#1576#1577#0" expanded="true" />
-                <element signature="e#1622#1623#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="method#plotTrecs#0;class#Main#0" expanded="false" />
+                <element signature="method#readFile#0;class#Main#0" expanded="false" />
+                <element signature="method#printUsage#0;class#Main#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tutorials/Main.java">
+      <file leaf-file-name="Ranker.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/Ranker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="817">
-              <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+            <state relative-caret-position="153">
+              <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#readFile#0;class#Main#0" expanded="false" />
-                <element signature="method#readProfiles#0;class#Main#0" expanded="false" />
-                <element signature="method#printUsage#0;class#Main#0" expanded="false" />
+                <element signature="method#Ranker#0;class#Ranker#0" expanded="false" />
+                <element signature="e#1285#1286#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -138,9 +129,23 @@
       <file leaf-file-name="TwitterReader.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tutorials/twitter/TwitterReader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+            <state relative-caret-position="114">
+              <caret line="15" column="31" lean-forward="false" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestConfig.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="267">
+              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+              <folding>
+                <element signature="method#loadTweets#0;class#TestConfig#0" expanded="false" />
+                <element signature="e#2251#2252#0" expanded="true" />
+                <element signature="e#2286#2287#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -163,12 +168,19 @@
       <find>analyzer</find>
       <find>result</find>
       <find>CommandLine</find>
-      <find>trecs</find>
       <find>-index</find>
       <find>analyzerConfig</find>
       <find>tweets =</find>
       <find>entr</find>
       <find>DataSetTrec</find>
+      <find>Index</find>
+      <find>field</find>
+      <find>-f</find>
+      <find>option</find>
+      <find>configs</find>
+      <find>q</find>
+      <find>createTrec</find>
+      <find>trecs</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -190,7 +202,6 @@
         <option value="$PROJECT_DIR$/src/tutorials/configurations/AnalyzerConfiguration.java" />
         <option value="$PROJECT_DIR$/src/tutorials/utils/DataSetTrec.java" />
         <option value="$PROJECT_DIR$/src/tutorials/indexer/Lab0NovaBaseline.java" />
-        <option value="$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java" />
         <option value="$PROJECT_DIR$/src/tutorials/utils/CommandLine.java" />
         <option value="$PROJECT_DIR$/src/tutorials/analyzer/CustomAnalyzer.java" />
         <option value="$PROJECT_DIR$/src/tutorials/analyzer/TestAnalyzer.java" />
@@ -198,9 +209,16 @@
         <option value="$PROJECT_DIR$/src/tutorials/utils/LineChart.java" />
         <option value="$PROJECT_DIR$/src/tutorials/configurations/Expand.java" />
         <option value="$PROJECT_DIR$/src/tutorials/twitter/TwitterReader.java" />
-        <option value="$PROJECT_DIR$/src/tutorials/configurations/RunConfig.java" />
-        <option value="$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java" />
         <option value="$PROJECT_DIR$/src/tutorials/utils/JSONProfile.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/configurations/RankFusion.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/configurations/RunConfig.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/indexer/RankFusion.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/rank/RunRanker.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/configurations/Ranker.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/rank/RankFusion.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java" />
         <option value="$PROJECT_DIR$/src/tutorials/Main.java" />
         <option value="$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java" />
       </list>
@@ -256,7 +274,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -285,6 +302,27 @@
               <item name="pw_2017_2018" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="tutorials" type="462c0819:PsiDirectoryNode" />
+              <item name="configurations" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pw_2017_2018" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pw_2017_2018" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="tutorials" type="462c0819:PsiDirectoryNode" />
+              <item name="indexer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pw_2017_2018" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pw_2017_2018" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="tutorials" type="462c0819:PsiDirectoryNode" />
+              <item name="rank" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pw_2017_2018" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pw_2017_2018" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="tutorials" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -295,6 +333,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
       <pane id="PackagesPane" />
       <pane id="Scratches" />
     </panes>
@@ -336,13 +375,13 @@
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="tutorials.configurations.*" />
+          <option name="PATTERN" value="tutorials.rank.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="tutorials.Main" />
       <option name="VM_PARAMETERS" value="-Xmx1024m" />
-      <option name="PROGRAM_PARAMETERS" value="-f E:\datasets\rts2016-qrels-tweets2016.jsonl -q &quot;E:\datasets\TREC2016-RTS-topics.json&quot; -r &quot;StopFilter&quot; -sf -bm25 1.2 0.75 -index" />
+      <option name="PROGRAM_PARAMETERS" value="-f E:\datasets\rts2016-qrels-tweets2016.jsonl -q &quot;E:\datasets\TREC2016-RTS-topics.json&quot; -fuse -r &quot;StopFilter&quot; -sf -bm25 1.2 0.75 -index -r &quot;Standard filter&quot; -stdf -bm25 1.2 0.75 -index" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
@@ -450,30 +489,48 @@
       <option name="presentableId" value="Default" />
       <updated>1511202947659</updated>
     </task>
+    <task id="LOCAL-00001" summary="Necessário fazer referência a org.json. Adicionar .jar.&#10;Simplificado a leitura dos argumentos.&#10;Leitura dos tweets.&#10;Criação de indexes para cada dia com os tweets dos dias anteriores.&#10;Leitura dos profiles.&#10;Pesquisa dos profiles nos tweets, utilizando o index do dia correto.&#10;Necessário filtrar o index para não obter tweets de dias anteriores.">
+      <created>1513031985683</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1513031985683</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1060" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32790697" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32790697" sideWeight="0.49785176" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32906976" sideWeight="0.5085929" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32906976" sideWeight="0.4914071" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25993556" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25993556" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290993" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973147" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3988372" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3988372" sideWeight="0.49570355" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -482,7 +539,6 @@
       <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32975295" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290993" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -523,16 +579,52 @@
       </list>
     </option>
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Necessário fazer referência a org.json. Adicionar .jar.&#10;Simplificado a leitura dos argumentos.&#10;Leitura dos tweets.&#10;Criação de indexes para cada dia com os tweets dos dias anteriores.&#10;Leitura dos profiles.&#10;Pesquisa dos profiles nos tweets, utilizando o index do dia correto.&#10;Necessário filtrar o index para não obter tweets de dias anteriores." />
-    <option name="LAST_COMMIT_MESSAGE" value="Necessário fazer referência a org.json. Adicionar .jar.&#10;Simplificado a leitura dos argumentos.&#10;Leitura dos tweets.&#10;Criação de indexes para cada dia com os tweets dos dias anteriores.&#10;Leitura dos profiles.&#10;Pesquisa dos profiles nos tweets, utilizando o index do dia correto.&#10;Necessário filtrar o index para não obter tweets de dias anteriores." />
+    <MESSAGE value="Refactorizado código para funções.&#10;Adicionado a configuração para fazer rank fusion(ainda não implementado)&#10;Pesquisa por tweets só do próprio dia.&#10;TODO:&#10;- Melhorar query expansion.&#10;- K-Means (Information diversity).&#10;- Near duplicate removal (Jaccard).&#10;- Rank fusion." />
+    <MESSAGE value="Refactorizado código para funções.&#10;Adicionado a configuração para fazer rank fusion(ainda não implementado)&#10;Pesquisa por tweets só do próprio dia.&#10;TODO:&#10;- Melhorar query expansion.&#10;- K-Means (Information diversity).&#10;- Near duplicate removal (Jaccard).&#10;- Rank fusion.&#10;&#10;Um exemplo de argumentos que o programa recebe (-h mostra uma lista de argumentos suportados):&#10;-f&#10;E:\datasets\rts2016-qrels-tweets2016.jsonl&#10;-q&#10;&quot;E:\datasets\TREC2016-RTS-topics.json&quot;&#10;-fuse&#10;-r&#10;&quot;StopFilter&quot;&#10;-sf&#10;-bm25&#10;1.2&#10;0.75&#10;-index&#10;-r&#10;&quot;Standard filter&quot;&#10;-stdf&#10;-bm25&#10;1.2&#10;0.75&#10;-index" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactorizado código para funções.&#10;Adicionado a configuração para fazer rank fusion(ainda não implementado)&#10;Pesquisa por tweets só do próprio dia.&#10;TODO:&#10;- Melhorar query expansion.&#10;- K-Means (Information diversity).&#10;- Near duplicate removal (Jaccard).&#10;- Rank fusion.&#10;&#10;Um exemplo de argumentos que o programa recebe (-h mostra uma lista de argumentos suportados):&#10;-f&#10;E:\datasets\rts2016-qrels-tweets2016.jsonl&#10;-q&#10;&quot;E:\datasets\TREC2016-RTS-topics.json&quot;&#10;-fuse&#10;-r&#10;&quot;StopFilter&quot;&#10;-sf&#10;-bm25&#10;1.2&#10;0.75&#10;-index&#10;-r&#10;&quot;Standard filter&quot;&#10;-stdf&#10;-bm25&#10;1.2&#10;0.75&#10;-index" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="55" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/tutorials/twitter/TwitterReader.java</url>
+          <line>21</line>
+          <properties />
+          <option name="timeStamp" value="76" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="84" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -540,65 +632,11 @@
         <watch expression="((AbstractMap.SimpleEntry)((EnumMap)((BooleanQuery)query).clauseSets).entrySet().toArray()[2]).getValue()" custom="org.apache.lucene.search.BooleanQuery,java.util.EnumMap,java.util.AbstractMap.SimpleEntry" />
         <watch expression="getPath(config, date)" />
         <watch expression="query" />
+        <watch expression="DateTools.timeToString(Date.valueOf(date).getTime()" />
       </configuration>
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/Expand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="8" column="11" lean-forward="false" selection-start-line="8" selection-start-column="11" selection-end-line="8" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/../twitter4j-4.0.4/lib/twitter4j-core-4.0.4.jar!/twitter4j/StatusJSONImpl.class" />
-    <entry file="jar://$PROJECT_DIR$/../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/document/Document.class" />
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/io/FileInputStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="194" column="0" lean-forward="false" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java" />
-    <entry file="jar://$PROJECT_DIR$/../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/index/IndexWriterConfig.class" />
-    <entry file="jar://$PROJECT_DIR$/../twitter4j-4.0.4/lib/twitter4j-core-4.0.4.jar!/twitter4j/Status.class" />
-    <entry file="jar://$PROJECT_DIR$/../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/index/IndexWriter.class" />
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/util/Date.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="195" column="11" lean-forward="false" selection-start-line="195" selection-start-column="11" selection-end-line="195" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/time/LocalDate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="1688" column="18" lean-forward="false" selection-start-line="1688" selection-start-column="18" selection-end-line="1688" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/jre/lib/ext/nashorn.jar!/jdk/nashorn/internal/parser/JSONParser.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="40" column="11" lean-forward="false" selection-start-line="40" selection-start-column="11" selection-end-line="40" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/../../jfreechart-1.0.19/jfreechart-1.0.19/lib/orsoncharts-1.4-eval-nofx.jar!/com/orsoncharts/util/json/JSONObject.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-807">
-          <caret line="17" column="11" lean-forward="false" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/../../twitter4j-4.0.4/lib/twitter4j-core-4.0.4.jar!/twitter4j/JSONArray.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1425">
@@ -641,20 +679,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding>
-            <element signature="e#604#605#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tutorials/utils/DataSetTrec.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
           <caret line="12" column="11" lean-forward="false" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#335#336#0" expanded="false" />
+            <element signature="e#362#363#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -662,14 +695,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="276">
           <caret line="149" column="8" lean-forward="false" selection-start-line="149" selection-start-column="8" selection-end-line="149" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="14" column="11" lean-forward="false" selection-start-line="14" selection-start-column="11" selection-end-line="14" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -681,13 +706,6 @@
             <element signature="e#6252#6253#0" expanded="false" />
             <element signature="e#6320#6321#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/time/format/DateTimeFormatter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="534" column="36" lean-forward="false" selection-start-line="534" selection-start-column="36" selection-end-line="534" selection-end-column="36" />
         </state>
       </provider>
     </entry>
@@ -709,20 +727,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
           <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/search/Query.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/../../twitter4j-4.0.4/lib/twitter4j-core-4.0.4.jar!/twitter4j/StatusJSONImpl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="259" column="0" lean-forward="false" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -761,24 +765,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/document/FieldType.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="81" column="0" lean-forward="false" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/index/DefaultIndexingChain.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="293">
           <caret line="524" column="18" lean-forward="false" selection-start-line="524" selection-start-column="18" selection-end-line="524" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/search/TermQuery.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -803,59 +793,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/search/BooleanQuery.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="28">
-          <caret line="331" column="15" lean-forward="false" selection-start-line="331" selection-start-column="15" selection-end-line="331" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/twitter/TwitterReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="817">
-          <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#readFile#0;class#Main#0" expanded="false" />
-            <element signature="method#readProfiles#0;class#Main#0" expanded="false" />
-            <element signature="method#printUsage#0;class#Main#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/utils/JSONProfile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding>
-            <element signature="e#287#288#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/RunConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="54" column="0" lean-forward="false" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
-          <folding>
-            <element signature="method#RunConfig#0;class#RunConfig#0" expanded="false" />
-            <element signature="e#1000#1001#0" expanded="true" />
-            <element signature="e#1043#1044#0" expanded="true" />
-            <element signature="e#1246#1247#0" expanded="true" />
-            <element signature="e#1576#1577#0" expanded="true" />
-            <element signature="e#1622#1623#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/search/IndexSearcher.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3458">
@@ -872,37 +809,274 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/util/Date.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="883" column="16" lean-forward="false" selection-start-line="883" selection-start-column="16" selection-end-line="883" selection-end-column="16" />
+          <folding>
+            <element signature="e#37718#37719#0" expanded="false" />
+            <element signature="e#37754#37755#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/index/IndexOptions.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="7" column="12" lean-forward="false" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/document/FieldType.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="387">
+          <caret line="46" column="11" lean-forward="false" selection-start-line="46" selection-start-column="11" selection-end-line="46" selection-end-column="11" />
+          <folding>
+            <element signature="e#2571#2572#0" expanded="true" />
+            <element signature="e#2615#2616#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/document/Field.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="27" column="14" lean-forward="false" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+        <state relative-caret-position="168">
+          <caret line="107" column="47" lean-forward="false" selection-start-line="107" selection-start-column="42" selection-end-line="107" selection-end-column="47" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/document/LongPoint.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1064">
+        <state relative-caret-position="276">
           <caret line="68" column="11" lean-forward="false" selection-start-line="68" selection-start-column="11" selection-end-line="68" selection-end-column="11" />
+          <folding>
+            <element signature="e#2383#2384#0" expanded="true" />
+            <element signature="e#2446#2447#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/document/StringField.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="15" column="11" lean-forward="false" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/time/LocalDate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-66">
+          <caret line="1827" column="16" lean-forward="false" selection-start-line="1827" selection-start-column="16" selection-end-line="1827" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/text/DateFormat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="342" column="24" lean-forward="false" selection-start-line="342" selection-start-column="24" selection-end-line="342" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/document/DateTools.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/search/Query.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="10" column="22" lean-forward="false" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/time/format/DateTimeFormatter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-9">
+          <caret line="1717" column="18" lean-forward="false" selection-start-line="1717" selection-start-column="18" selection-end-line="1717" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/search/TermQuery.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="608">
+          <caret line="61" column="34" lean-forward="false" selection-start-line="61" selection-start-column="34" selection-end-line="61" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/index/Term.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="33" column="11" lean-forward="false" selection-start-line="33" selection-start-column="11" selection-end-line="33" selection-end-column="11" />
+          <folding>
+            <element signature="e#933#934#0" expanded="true" />
+            <element signature="e#974#975#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/search/BooleanQuery.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="352" column="0" lean-forward="true" selection-start-line="352" selection-start-column="0" selection-end-line="352" selection-end-column="0" />
+          <folding>
+            <element signature="e#13371#13372#0" expanded="true" />
+            <element signature="e#13443#13444#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/lang/Float.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="905" column="22" lean-forward="false" selection-start-line="905" selection-start-column="22" selection-end-line="905" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/rank/RankFusion.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#193#194#0" expanded="true" />
+            <element signature="e#233#234#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="14" column="11" lean-forward="false" selection-start-line="14" selection-start-column="11" selection-end-line="14" selection-end-column="11" />
+          <folding>
+            <element signature="method#ResultDocs#0;class#ResultDocs#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/utils/LineChart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="16" column="107" lean-forward="false" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="107" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/utils/CSVUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="267">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding>
+            <element signature="method#loadTweets#0;class#TestConfig#0" expanded="false" />
+            <element signature="e#2251#2252#0" expanded="true" />
+            <element signature="e#2286#2287#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/twitter/TwitterReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="15" column="31" lean-forward="false" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/utils/JSONProfile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding>
+            <element signature="e#287#288#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/Ranker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#Ranker#0;class#Ranker#0" expanded="false" />
+            <element signature="e#1285#1286#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../twitter4j-4.0.4/lib/twitter4j-core-4.0.4.jar!/twitter4j/StatusJSONImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="259" column="0" lean-forward="false" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
+          <folding>
+            <element signature="e#10594#10595#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="42" column="23" lean-forward="false" selection-start-line="42" selection-start-column="23" selection-end-line="42" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="103" column="36" lean-forward="false" selection-start-line="103" selection-start-column="36" selection-end-line="103" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#plotTrecs#0;class#Main#0" expanded="false" />
+            <element signature="method#readFile#0;class#Main#0" expanded="false" />
+            <element signature="method#printUsage#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1015">
+          <caret line="953" column="59" lean-forward="false" selection-start-line="953" selection-start-column="59" selection-end-line="953" selection-end-column="59" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="299" column="14" lean-forward="true" selection-start-line="299" selection-start-column="14" selection-end-line="299" selection-end-column="14" />
+        <state relative-caret-position="333">
+          <caret line="361" column="33" lean-forward="true" selection-start-line="361" selection-start-column="33" selection-end-line="361" selection-end-column="33" />
           <folding>
-            <element signature="e#2632#2667#0" expanded="false" />
-            <element signature="e#4263#4318#0" expanded="false" />
-            <element signature="method#createTrec#0;class#TwitterIndexer#0" expanded="false" />
-            <element signature="method#writeCSV#0;class#TwitterIndexer#0" expanded="false" />
+            <element signature="e#1501#1502#0" expanded="true" />
+            <element signature="e#1568#1569#0" expanded="true" />
+            <element signature="e#2412#2447#0" expanded="false" />
+            <element signature="e#4126#4181#0" expanded="false" />
+            <element signature="method#close#0;class#TwitterIndexer#0" expanded="false" />
+            <element signature="method#expandQuery#0;class#TwitterIndexer#0" expanded="false" />
             <element signature="method#sortByValue#0;class#TwitterIndexer#0" expanded="false" />
-            <element signature="method#parseScoreDocs#0;class#TwitterIndexer#0" expanded="false" />
-            <element signature="e#11934#11946#0" expanded="true" />
-            <element signature="method#getExpansionTerms#0;class#TwitterIndexer#0" expanded="false" />
-            <element signature="e#12467#12484#0" expanded="true" />
-            <element signature="e#13179#13196#0" expanded="true" />
           </folding>
         </state>
       </provider>

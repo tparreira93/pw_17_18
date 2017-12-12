@@ -54,14 +54,7 @@ public class ResultDocs implements Comparable<ResultDocs> {
 
 	@Override
 	public int compareTo(ResultDocs o) {
-		// TODO Auto-generated method stub
-		if (this.score < o.getScore())
-			return 	1;
-		if (this.score > o.getScore())
-			return -1;
-
-		return 0;
-
+		return Float.compare(o.getScore(), this.score);
 	}
 
 }

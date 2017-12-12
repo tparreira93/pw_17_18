@@ -1,23 +1,24 @@
 package tutorials.configurations;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.similarities.Similarity;
-import tutorials.analyzer.CustomAnalyzer;
 import tutorials.analyzer.TestAnalyzer;
+import tutorials.utils.ResultDocs;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class RunConfig {
+public class Ranker {
     private AnalyzerConfiguration analyzerConfiguration;
     private Similarity similarityConfiguration;
     private Boolean index;
     private Expand expand;
     private UUID id;
     private String name;
+    private List<ResultDocs> results;
 
-    public RunConfig(String name) {
+    public Ranker(String name) {
         analyzerConfiguration = new AnalyzerConfiguration();
         similarityConfiguration = null;
         expand = new Expand();
@@ -75,4 +76,7 @@ public class RunConfig {
         this.similarityConfiguration = sim;
     }
 
+    public void setResults(List<ResultDocs> results) {
+        this.results = results;
+    }
 }
