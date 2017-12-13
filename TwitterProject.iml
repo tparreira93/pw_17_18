@@ -11,5 +11,6 @@
     <orderEntry type="library" name="twitter4j" level="application" />
     <orderEntry type="library" name="jChart" level="application" />
     <orderEntry type="library" name="JSON" level="application" />
+    <orderEntry type="library" name="carrot2" level="application" />
   </component>
 </module>
