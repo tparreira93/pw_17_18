@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d204b987-675e-408f-b009-65b0ed82f76a" name="Default" comment="Refactorizado código para funções.&#10;Adicionado o rank fusion.&#10;TODO:&#10;- Melhorar query expansion.&#10;- K-Means (Information diversity).&#10;- Near duplicate removal (Jaccard).">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/tutorials/rank/DailyDigest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/tutorials/rank/ProfileDigest.java" />
+    <list default="true" id="d204b987-675e-408f-b009-65b0ed82f76a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/Main.class" afterPath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/Main.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/configurations/TestConfig.class" afterPath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/configurations/TestConfig.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/indexer/TwitterIndexer.class" afterPath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/indexer/TwitterIndexer.class" />
@@ -11,16 +9,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/utils/LineChart.class" afterPath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/utils/LineChart.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/utils/ResultDocs.class" afterPath="$PROJECT_DIR$/out/production/TwitterProject/tutorials/utils/ResultDocs.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/Main.java" afterPath="$PROJECT_DIR$/src/tutorials/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/configurations/Ranker.java" afterPath="$PROJECT_DIR$/src/tutorials/configurations/Ranker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java" afterPath="$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java" afterPath="$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java" afterPath="$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/rank/RankFusion.java" afterPath="$PROJECT_DIR$/src/tutorials/rank/RankFusion.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/utils/DataSetTrec.java" afterPath="$PROJECT_DIR$/src/tutorials/utils/DataSetTrec.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/utils/LineChart.java" afterPath="$PROJECT_DIR$/src/tutorials/utils/LineChart.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java" afterPath="$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -487,7 +475,14 @@
       <option name="project" value="LOCAL" />
       <updated>1513048364618</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Refactorizado código para funções.&#10;Adicionado o rank fusion.&#10;Ver readme.md com instruões sobre como executar.&#10;TODO:&#10;- Melhorar query expansion.&#10;- K-Means (Information diversity).&#10;- Near duplicate removal (Jaccard).">
+      <created>1513128229788</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1513128229788</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView">
@@ -604,7 +599,8 @@
     <MESSAGE value="Necessário fazer referência a org.json. Adicionar .jar.&#10;Simplificado a leitura dos argumentos.&#10;Leitura dos tweets.&#10;Criação de indexes para cada dia com os tweets dos dias anteriores.&#10;Leitura dos profiles.&#10;Pesquisa dos profiles nos tweets, utilizando o index do dia correto.&#10;Necessário filtrar o index para não obter tweets de dias anteriores." />
     <MESSAGE value="Refactorizado código para funções.&#10;Adicionado a configuração para fazer rank fusion(ainda não implementado)&#10;Pesquisa por tweets só do próprio dia.&#10;TODO:&#10;- Melhorar query expansion.&#10;- K-Means (Information diversity).&#10;- Near duplicate removal (Jaccard).&#10;- Rank fusion." />
     <MESSAGE value="Refactorizado código para funções.&#10;Adicionado a configuração para fazer rank fusion(ainda não implementado)&#10;Pesquisa por tweets só do próprio dia.&#10;TODO:&#10;- Melhorar query expansion.&#10;- K-Means (Information diversity).&#10;- Near duplicate removal (Jaccard).&#10;- Rank fusion.&#10;&#10;Um exemplo de argumentos que o programa recebe (-h mostra uma lista de argumentos suportados):&#10;-f&#10;E:\datasets\rts2016-qrels-tweets2016.jsonl&#10;-q&#10;&quot;E:\datasets\TREC2016-RTS-topics.json&quot;&#10;-fuse&#10;-r&#10;&quot;StopFilter&quot;&#10;-sf&#10;-bm25&#10;1.2&#10;0.75&#10;-index&#10;-r&#10;&quot;Standard filter&quot;&#10;-stdf&#10;-bm25&#10;1.2&#10;0.75&#10;-index" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactorizado código para funções.&#10;Adicionado a configuração para fazer rank fusion(ainda não implementado)&#10;Pesquisa por tweets só do próprio dia.&#10;TODO:&#10;- Melhorar query expansion.&#10;- K-Means (Information diversity).&#10;- Near duplicate removal (Jaccard).&#10;- Rank fusion.&#10;&#10;Um exemplo de argumentos que o programa recebe (-h mostra uma lista de argumentos suportados):&#10;-f&#10;E:\datasets\rts2016-qrels-tweets2016.jsonl&#10;-q&#10;&quot;E:\datasets\TREC2016-RTS-topics.json&quot;&#10;-fuse&#10;-r&#10;&quot;StopFilter&quot;&#10;-sf&#10;-bm25&#10;1.2&#10;0.75&#10;-index&#10;-r&#10;&quot;Standard filter&quot;&#10;-stdf&#10;-bm25&#10;1.2&#10;0.75&#10;-index" />
+    <MESSAGE value="Refactorizado código para funções.&#10;Adicionado o rank fusion.&#10;Ver readme.md com instruões sobre como executar.&#10;TODO:&#10;- Melhorar query expansion.&#10;- K-Means (Information diversity).&#10;- Near duplicate removal (Jaccard)." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactorizado código para funções.&#10;Adicionado o rank fusion.&#10;Ver readme.md com instruões sobre como executar.&#10;TODO:&#10;- Melhorar query expansion.&#10;- K-Means (Information diversity).&#10;- Near duplicate removal (Jaccard)." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
