@@ -5,21 +5,27 @@ import java.util.Map;
 
 public class DataSetTrec {
 
-	private String filter;
+	private String name;
+	private String rawText;
 	private float map;
 	private Map<String, Float> pages = new LinkedHashMap<String, Float>();
 	private Map<String, Float> recalls = new LinkedHashMap<String, Float>();
 
-	public DataSetTrec(String filter) {
-		this.filter = filter;
+	public DataSetTrec(String name, String rawText) {
+		this.name = name;
+		this.rawText = rawText;
+	}
+
+	public String getRawText() {
+		return rawText;
 	}
 
 	public void setMap(float map) {
 		this.map = map;
 	}
 
-	public String getFilter() {
-		return filter;
+	public String getName() {
+		return name;
 	}
 
 	public float getMap() {

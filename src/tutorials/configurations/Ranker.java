@@ -1,11 +1,14 @@
 package tutorials.configurations;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.search.similarities.Similarity;
 import tutorials.analyzer.TestAnalyzer;
+import tutorials.rank.DailyDigest;
+import tutorials.rank.ProfileDigest;
 import tutorials.utils.ResultDocs;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,18 +20,36 @@ public class Ranker {
     private UUID id;
     private String name;
     private List<ResultDocs> results;
+    private List<DailyDigest> dailyDigests;
 
-    public Ranker(String name) {
+    public Ranker(String rankerName) {
         analyzerConfiguration = new AnalyzerConfiguration();
         similarityConfiguration = null;
         expand = new Expand();
         index = false;
         id = UUID.randomUUID();
-        this.name = name;
+        name = rankerName;
+        dailyDigests = new ArrayList<>();
+    }
+
+    public void addDailyDigest(DailyDigest digest) {
+        dailyDigests.add(digest);
+    }
+
+    public List<DailyDigest> getDigests() {
+        return dailyDigests;
     }
 
     public UUID getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        if(name.isEmpty())
+            return similarityConfiguration.toString();
+        else
+            return name;
     }
 
     public String getName() {
@@ -65,6 +86,8 @@ public class Ranker {
     }
 
     public Analyzer getAnalyzer(){
+        if(analyzerConfiguration.getFilters().size() == 0)
+            return new EnglishAnalyzer();
         return TestAnalyzer.getAnalyzer(this);
     }
 

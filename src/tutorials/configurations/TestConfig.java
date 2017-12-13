@@ -10,12 +10,14 @@ public class TestConfig {
     private List<MultiRanker> multiRankers;
     private List<Ranker> configs;
     private String query;
+    private String evaluation;
 
     public TestConfig() {
         fileName = "";
         configs = new ArrayList<>();
         multiRankers = new ArrayList<>();
         query = "";
+        evaluation = "";
     }
 
     public boolean verboseValidate(){
@@ -25,6 +27,10 @@ public class TestConfig {
             return false;
         }
         for (MultiRanker config : getMultiRankers()) {
+            if (config.getK() < 0.0) {
+                System.out.println("Fuse factor k must be greater or equal to 0.");
+                return false;
+            }
             for (Ranker ranker : config.getRankers()) {
                 if(ranker.getAnalyzer() == null)
                 {
@@ -43,6 +49,7 @@ public class TestConfig {
                 }
             }
         }
+
         return true;
     }
 
@@ -80,11 +87,19 @@ public class TestConfig {
         this.query = query;
     }
 
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation;
+    }
+
     public void addRanker(MultiRanker ranker) {
         multiRankers.add(ranker);
     }
 
     public List<MultiRanker> getMultiRankers() {
         return multiRankers;
+    }
+
+    public String getEvaluation() {
+        return evaluation;
     }
 }

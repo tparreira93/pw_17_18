@@ -39,35 +39,57 @@ public class Main {
         }
 
         try {
+            LocalDate startDate = LocalDate.parse("2016-08-02");
+            LocalDate endDate = LocalDate.parse("2016-08-11");
             List<MultiRanker> multiRankers = testConfig.getMultiRankers();
             List<DataSetTrec> trecs = new LinkedList<>();
             List<JSONProfile> interestProfiles;
-            TwitterIndexer baseline = new TwitterIndexer(LocalDate.parse("2016-08-02"), LocalDate.parse("2016-08-11"));
+            TwitterIndexer indexer = new TwitterIndexer(startDate, endDate);
             List<Status> tweets = new ArrayList<>();
 
             try {
                 if (testConfig.loadTweets()) {
+                    System.out.println("Loading tweets...");
                     tweets = loadTweets(testConfig.getFileName());
+                    System.out.println(tweets.size() + " tweets loaded!");
                 }
+                System.out.println("Loading interest profiles...");
                 interestProfiles = readProfiles(testConfig.getQuery());
+                System.out.println(interestProfiles.size() + " profiles loaded!");
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
 
+            System.out.println("");
+
             for (MultiRanker multiRanker : multiRankers) {
                 for (Ranker ranker : multiRanker.getRankers()) {
                     if (ranker.createIndex()) {
-                        baseline.openIndex(ranker);
-                        baseline.indexTweets(tweets);
-                        baseline.close();
+                        System.out.println("Indexing " + ranker.toString() + "...");
+                        indexer.openIndex(ranker);
+                        indexer.indexTweets(tweets);
+                        indexer.close();
                     }
 
-                    baseline.indexSearch(ranker, interestProfiles);
+                    System.out.println("Creating digests for " + ranker.toString() + "...");
+                    System.out.println("");
+                    indexer.indexSearch(ranker, interestProfiles);
                 }
+                System.out.println("");
+                System.out.println("Fusing scores of " + multiRanker.toString() + "...");
+
                 RankFusion fusion = new RankFusion();
                 List<ResultDocs> fused = fusion.Fuse(multiRanker);
-                multiRanker.createTrec("tmp.txt", fused);
+
+                DataSetTrec t  = multiRanker.createTrec("tmp.txt", testConfig.getEvaluation(), fused);
+                trecs.add(t);
+
+
+                System.out.println("");
+                System.out.println("");
+                System.out.println(t.getName());
+                System.out.println(t.getRawText());
             }
 
             plotTrecs(trecs);
@@ -84,7 +106,7 @@ public class Main {
 
         // custom separator + quote
         for (DataSetTrec d : t) {
-            CSVUtils.writeLine(writer, Arrays.asList(d.getFilter(), String.valueOf(d.getMap())));
+            CSVUtils.writeLine(writer, Arrays.asList(d.getName(), String.valueOf(d.getMap())));
         }
 
         writer.flush();
@@ -92,11 +114,11 @@ public class Main {
     }
 
     private static void plotTrecs(List<DataSetTrec> trecs) {
-        plot("filters", "Precision x Documents",
+        plot("Precision x Documents", "Precision x Documents",
                 String.valueOf(TwitterIndexer.NUMDOCS), trecs,
                 'p');
 
-        plot("filters", "Precision x Recall",
+        plot("Precision x Recall", "Precision x Recall",
                 String.valueOf(TwitterIndexer.NUMDOCS),
                 trecs, 'r');
     }
@@ -153,17 +175,20 @@ public class Main {
     private static void printUsage() {
         System.out.println("web search - Project\n");
         System.out.println("Usage example:");
-        System.out.println("[(-h|--help)] -f name -q name (-fuse | -nofuse) -r [index (filter string)] (-fuse | -nofuse) -r [index (filter string)] ....");
+        System.out.println("[(-h|--help)] -f name -q name -e evaluation (-fuse | -nofuse) " +
+                "-r [index (filter string | nothing(defaults to english analyzer))] .." +
+                " -r [index (filter string)] (-fuse | -nofuse) -r [index (filter string | nothing(defaults to english analyzer))] ....");
+        System.out.println("-h or --help: Help.");
         System.out.println("-f: Twitter JSON");
         System.out.println("\t filename");
         System.out.println("-q: Queries JSON");
+        System.out.println("\t filename");
+        System.out.println("-e: Evaluation");
         System.out.println("\t filename");
         System.out.println("-fuse: Fuse following ranks");
         System.out.println("-nofuse: No fusion for following ranks");
         System.out.println("-r [index (filter string)]:");
         System.out.println("-index: Create index");
-        System.out.println("Filter:");
-        System.out.println("-h or --help: Help.");
         System.out.println("Filters:");
         System.out.println("-sf: Stop Filter.");
         System.out.println("-shf: Shingle Filter");
@@ -179,6 +204,7 @@ public class Main {
         System.out.println("-edgtf: Edge N-Gram Token Filter");
         System.out.println("\t MinGram integer");
         System.out.println("\t MaxGram integer");
+        System.out.println("Similarities:");
         System.out.println("-classic: Classic similarity (vector space model)");
         System.out.println("-bm25: BM25 similarity");
         System.out.println("\t k1 float");
@@ -207,9 +233,17 @@ public class Main {
                             testConfig.setQuery(args[++i]);
                         }
                         break;
+                    case "-e":
+                        if (args.length - i >= 1) {
+                            testConfig.setEvaluation(args[++i]);
+                        }
+                        break;
                     case "-fuse":
                         fuse = true;
                         multiRanker = new MultiRanker();
+                        if (args.length - i >= 1) {
+                            multiRanker.setK(Float.parseFloat(args[++i]));
+                        }
                         testConfig.addRanker(multiRanker);
                         break;
                     case "-nofuse":
