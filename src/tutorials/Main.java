@@ -7,6 +7,8 @@ import org.apache.lucene.search.similarities.LMJelinekMercerSimilarity;
 import org.jfree.ui.RefineryUtilities;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import tutorials.clustering.Jaccard;
 import tutorials.configurations.AnalyzerConfiguration;
 import tutorials.configurations.Expand;
 import tutorials.configurations.Ranker;
@@ -37,7 +39,8 @@ public class Main {
             printUsage();
             return;
         }
-
+        
+        
         try {
             List<MultiRanker> multiRankers = testConfig.getMultiRankers();
             List<DataSetTrec> trecs = new LinkedList<>();
@@ -62,6 +65,7 @@ public class Main {
                         baseline.indexTweets(tweets);
                         baseline.close();
                     }
+                    
 
                     baseline.indexSearch(ranker, interestProfiles);
                 }
