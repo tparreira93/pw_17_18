@@ -3,7 +3,6 @@ package tutorials.utils;
 import org.apache.lucene.document.Document;
 
 public class ResultDocs implements Comparable<ResultDocs> {
-
 	private String queryId;
 	public final static String CONST_QO = "Q0";
 	public final static String CONST_RUN = "1";
@@ -12,11 +11,11 @@ public class ResultDocs implements Comparable<ResultDocs> {
 	private float score;
 	private Document doc;
 
-	public ResultDocs(String queryId, long docId, float score, Document doc) {
+	public ResultDocs(String queryId, long docId, float score, Document doc, int rankPos) {
 		this.queryId = queryId;
 		this.docId = docId;
 		this.score = score;
-		rank = 0;
+		this.rank = rankPos;
 		this.doc = doc;
 	}
 
@@ -46,6 +45,10 @@ public class ResultDocs implements Comparable<ResultDocs> {
 
 	public float getScore() {
 		return score;
+	}
+
+	public void setScore(float score) {
+		this.score = score;
 	}
 
 	public static String getConstRun() {

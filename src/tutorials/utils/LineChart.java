@@ -44,7 +44,7 @@ public class LineChart extends ApplicationFrame {
 		for (DataSetTrec trec : t) {
 			for (Map.Entry<String, Float> entry : trec.getPages().entrySet()) {
 
-				dataset.addValue(entry.getValue(), trec.getFilter(), entry.getKey());
+				dataset.addValue(entry.getValue(), trec.getName(), entry.getKey());
 			}
 		}
 
@@ -57,7 +57,7 @@ public class LineChart extends ApplicationFrame {
 		for (DataSetTrec trec : t) {
 			for (Map.Entry<String, Float> entry : trec.getRecalls().entrySet()) {
 
-				dataset.addValue(entry.getValue(), trec.getFilter(), entry.getKey());
+				dataset.addValue(entry.getValue(), trec.getName(), entry.getKey());
 			}
 		}
 
