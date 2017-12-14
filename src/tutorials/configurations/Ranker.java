@@ -5,7 +5,6 @@ import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.search.similarities.Similarity;
 import tutorials.analyzer.TestAnalyzer;
 import tutorials.rank.DailyDigest;
-import tutorials.rank.ProfileDigest;
 import tutorials.utils.ResultDocs;
 
 import java.util.ArrayList;

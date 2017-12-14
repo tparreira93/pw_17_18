@@ -5,10 +5,6 @@ import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.search.similarities.LMDirichletSimilarity;
 import org.apache.lucene.search.similarities.LMJelinekMercerSimilarity;
 import org.jfree.ui.RefineryUtilities;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import tutorials.clustering.Jaccard;
 import tutorials.configurations.AnalyzerConfiguration;
 import tutorials.configurations.Expand;
 import tutorials.configurations.Ranker;
@@ -16,17 +12,14 @@ import tutorials.configurations.TestConfig;
 import tutorials.indexer.TwitterIndexer;
 import tutorials.rank.MultiRanker;
 import tutorials.rank.RankFusion;
-import tutorials.twitter.TwitterReader;
-import tutorials.utils.*;
-import twitter4j.Status;
-import twitter4j.TwitterException;
+import tutorials.utils.CSVUtils;
+import tutorials.utils.DataSetTrec;
+import tutorials.utils.LineChart;
+import tutorials.utils.ResultDocs;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,19 +39,17 @@ public class Main {
             LocalDate endDate = LocalDate.parse("2016-08-11");
             List<MultiRanker> multiRankers = testConfig.getMultiRankers();
             List<DataSetTrec> trecs = new LinkedList<>();
-            List<JSONProfile> interestProfiles;
             TwitterIndexer indexer = new TwitterIndexer(startDate, endDate);
-            List<Status> tweets = new ArrayList<>();
 
             try {
-                if (testConfig.loadTweets()) {
+                if (testConfig.isLoadTweets()) {
                     System.out.println("Loading tweets...");
-                    tweets = loadTweets(testConfig.getFileName());
-                    System.out.println(tweets.size() + " tweets loaded!");
+                    testConfig.loadTweets();
+                    System.out.println(testConfig.getTweets().size() + " tweets loaded!");
                 }
                 System.out.println("Loading interest profiles...");
-                interestProfiles = readProfiles(testConfig.getQuery());
-                System.out.println(interestProfiles.size() + " profiles loaded!");
+                testConfig.loadProfiles();
+                System.out.println((testConfig.getTestData().size() + testConfig.getTrainData().size()) + " profiles loaded!");
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
@@ -71,15 +62,21 @@ public class Main {
                     if (ranker.createIndex()) {
                         System.out.println("Indexing " + ranker.toString() + "...");
                         indexer.openIndex(ranker);
-                        indexer.indexTweets(tweets);
+                        indexer.indexTweets(testConfig.getTweets());
                         indexer.close();
                     }
-                    
-
-                    System.out.println("Creating digests for " + ranker.toString() + "...");
-                    System.out.println("");
-                    indexer.indexSearch(ranker, interestProfiles);
+                    if (testConfig.isTrain()) {
+                        System.out.println("Creating train digests for " + ranker.toString() + "...");
+                        System.out.println("");
+                        indexer.indexSearch(ranker, testConfig.getTrainData());
+                    }
+                    else if (testConfig.isTest()) {
+                        System.out.println("Creating test digests for " + ranker.toString() + "...");
+                        System.out.println("");
+                        indexer.indexSearch(ranker, testConfig.getTestData());
+                    }
                 }
+
                 System.out.println("");
                 System.out.println("Fusing scores of " + multiRanker.toString() + "...");
 
@@ -134,48 +131,6 @@ public class Main {
         lineChart.setVisible(true);
     }
 
-    private static String readFile(String filename) throws IOException {
-        String result;
-        BufferedReader br = new BufferedReader(new FileReader(filename));
-        StringBuilder sb = new StringBuilder();
-        String line = br.readLine();
-        while (line != null) {
-            sb.append(line);
-            line = br.readLine();
-        }
-        result = sb.toString();
-        return result;
-    }
-
-    private static List<JSONProfile> readProfiles(String path) throws IOException {
-        List<JSONProfile> profiles = new ArrayList<>();
-        String jsonData = readFile(path);
-
-        JSONArray array = new JSONArray(jsonData);
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject obj = array.getJSONObject(i);
-            String id = obj.getString("topid");
-            String title = obj.getString("title");
-            String description = obj.getString("description");
-            String narrative = obj.getString("narrative");
-
-            JSONProfile profile = new JSONProfile(id, title, description, narrative);
-            profiles.add(profile);
-        }
-        return profiles;
-    }
-
-    private static List<Status> loadTweets(String fileName) {
-        List<Status> tweets = new ArrayList<>();
-        try {
-            tweets = TwitterReader.ReadFile(fileName);
-        } catch (TwitterException | IOException e) {
-            e.printStackTrace();
-        }
-
-        return tweets;
-    }
-
     private static void printUsage() {
         System.out.println("web search - Project\n");
         System.out.println("Usage example:");
@@ -188,6 +143,9 @@ public class Main {
         System.out.println("-q: Queries JSON");
         System.out.println("\t filename");
         System.out.println("-e: Evaluation");
+        System.out.println("-split: Split profiles in even and odd profile lists. It is need to specify if -train and\\or -test");
+        System.out.println("-test: Use test profile");
+        System.out.println("-train: Use train profile");
         System.out.println("\t filename");
         System.out.println("-fuse: Fuse following ranks");
         System.out.println("-nofuse: No fusion for following ranks");
@@ -241,6 +199,15 @@ public class Main {
                         if (args.length - i >= 1) {
                             testConfig.setEvaluation(args[++i]);
                         }
+                        break;
+                    case "-split":
+                        testConfig.setSplitData(true);
+                        break;
+                    case "-test":
+                        testConfig.setTest(true);
+                        break;
+                    case "-train":
+                        testConfig.setTrain(true);
                         break;
                     case "-fuse":
                         fuse = true;

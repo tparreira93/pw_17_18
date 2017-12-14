@@ -1,14 +1,11 @@
 package tutorials.clustering;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
 import org.carrot2.core.Cluster;
 import org.carrot2.core.Document;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
-import org.apache.lucene.search.ScoreDoc;
-import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class KMeans {
 	
@@ -29,7 +26,6 @@ public class KMeans {
 		b.documents = documents;
 		b.labelCount=1;
 		b.partitionCount= 3;
-		
 		b.process();
 		List<Cluster> cluster = b.clusters;
 		
