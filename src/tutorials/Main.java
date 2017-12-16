@@ -5,10 +5,7 @@ import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.search.similarities.LMDirichletSimilarity;
 import org.apache.lucene.search.similarities.LMJelinekMercerSimilarity;
 import org.jfree.ui.RefineryUtilities;
-import tutorials.configurations.AnalyzerConfiguration;
-import tutorials.configurations.Expand;
-import tutorials.configurations.Ranker;
-import tutorials.configurations.TestConfig;
+import tutorials.configurations.*;
 import tutorials.indexer.TwitterIndexer;
 import tutorials.rank.MultiRanker;
 import tutorials.rank.RankFusion;
@@ -57,13 +54,15 @@ public class Main {
 
             System.out.println("");
 
+            int run = 0;
             for (MultiRanker multiRanker : multiRankers) {
                 for (Ranker ranker : multiRanker.getRankers()) {
                     if (ranker.createIndex()) {
-                        System.out.println("Indexing " + ranker.toString() + "...");
-                        indexer.openIndex(ranker);
-                        indexer.indexTweets(testConfig.getTweets());
-                        indexer.close();
+                        if (indexer.openIndex(ranker)) {
+                            System.out.println("Indexing " + ranker.getIndexName() + "...");
+                            indexer.indexTweets(testConfig.getTweets());
+                            indexer.close();
+                        }
                     }
                     if (testConfig.isTrain()) {
                         System.out.println("Creating train digests for " + ranker.toString() + "...");
@@ -76,14 +75,19 @@ public class Main {
                         indexer.indexSearch(ranker, testConfig.getTestData());
                     }
                 }
+                List<ResultDocs> resultDocs;
+                if (multiRanker.isFusion()) {
+                    System.out.println("");
+                    System.out.println("Fusing scores of " + multiRanker.toString() + "...");
 
-                System.out.println("");
-                System.out.println("Fusing scores of " + multiRanker.toString() + "...");
+                    RankFusion fusion = new RankFusion();
+                    resultDocs = fusion.Fuse(multiRanker, 10);
+                } else {
+                    resultDocs = multiRanker.getResults(10);
+                }
 
-                RankFusion fusion = new RankFusion();
-                List<ResultDocs> fused = fusion.Fuse(multiRanker);
 
-                DataSetTrec t  = multiRanker.createTrec("tmp.txt", testConfig.getEvaluation(), fused);
+                DataSetTrec t  = multiRanker.createTrec("tmp.txt", testConfig.getEvaluation(), resultDocs, run++);
                 trecs.add(t);
 
 
@@ -94,20 +98,27 @@ public class Main {
             }
 
             plotTrecs(trecs);
-            writeCSV(trecs, "abc.csv");
+            writeCSV(trecs, "ranking_results.csv");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void writeCSV(List<DataSetTrec> t, String csvFile) throws IOException {
+    private static void writeCSV(List<DataSetTrec> trecList, String csvFile) throws IOException {
         FileWriter writer = new FileWriter(csvFile);
 
-        CSVUtils.writeLine(writer, Arrays.asList("Filter", "map"));
+        CSVUtils.writeLine(writer, Arrays.asList("Filter", "map", "P@5", "P@10"));
 
         // custom separator + quote
-        for (DataSetTrec d : t) {
-            CSVUtils.writeLine(writer, Arrays.asList(d.getName(), String.valueOf(d.getMap())));
+        for (DataSetTrec trec : trecList) {
+            Float p5 = trec.getPrecisions().get("5");
+            Float p10 = trec.getPrecisions().get("10");
+            String tmp5 = "", tmp10 = "";
+            if (p5 != null)
+                tmp5 = p5.toString();
+            if(p10 != null)
+                tmp10 = p10.toString();
+            CSVUtils.writeLine(writer,  Arrays.asList("\"" + trec.getName() + "\"", String.valueOf(trec.getMap()), tmp5, tmp10));
         }
 
         writer.flush();
@@ -116,11 +127,11 @@ public class Main {
 
     private static void plotTrecs(List<DataSetTrec> trecs) {
         plot("Precision x Documents", "Precision x Documents",
-                String.valueOf(TwitterIndexer.NUMDOCS), trecs,
+                String.valueOf(10), trecs,
                 'p');
 
         plot("Precision x Recall", "Precision x Recall",
-                String.valueOf(TwitterIndexer.NUMDOCS),
+                String.valueOf(10),
                 trecs, 'r');
     }
 
@@ -134,9 +145,9 @@ public class Main {
     private static void printUsage() {
         System.out.println("web search - Project\n");
         System.out.println("Usage example:");
-        System.out.println("[(-h|--help)] -f name -q name -e evaluation (-fuse | -nofuse) " +
+        System.out.println("[(-h|--help)] -f name -q name -e evaluation (-fusion | -nofusion) " +
                 "-r [index (filter string | nothing(defaults to english analyzer))] .." +
-                " -r [index (filter string)] (-fuse | -nofuse) -r [index (filter string | nothing(defaults to english analyzer))] ....");
+                " -r [index (filter string)] (-fusion | -nofusion) -r indexName (-index) [filters similarity expansion kmeans] ....");
         System.out.println("-h or --help: Help.");
         System.out.println("-f: Twitter JSON");
         System.out.println("\t filename");
@@ -147,11 +158,12 @@ public class Main {
         System.out.println("-test: Use test profile");
         System.out.println("-train: Use train profile");
         System.out.println("\t filename");
-        System.out.println("-fuse: Fuse following ranks");
-        System.out.println("-nofuse: No fusion for following ranks");
-        System.out.println("-r [index (filter string)]:");
+        System.out.println("-fusion: Rank fusion following ranks");
+        System.out.println("-nofusion: No fusion for following ranks");
+        System.out.println("Rank: -r indexName [index (filter string)]:");
         System.out.println("-index: Create index");
         System.out.println("Filters:");
+        System.out.println("Default filter\\analyzer is EnglishAnalyzer");
         System.out.println("-sf: Stop Filter.");
         System.out.println("-shf: Shingle Filter");
         System.out.println("\t MinShingleSize integer");
@@ -175,6 +187,13 @@ public class Main {
         System.out.println("\t mu float");
         System.out.println("-lmjm: LM Jelineck-Mercer");
         System.out.println("\t lambda float");
+        System.out.println("-expand: Pseudo-relevant feedback expansion");
+        System.out.println("\t numTerms int");
+        System.out.println("\t numRelevantDOcs int");
+        System.out.println("\t alfa float");
+        System.out.println("-kmeans: KMeans clustering");
+        System.out.println("\t clusters int");
+        System.out.println("\t numClusteringDocs int");
     }
 
     private static TestConfig parseConfig(String[] args) {
@@ -209,15 +228,27 @@ public class Main {
                     case "-train":
                         testConfig.setTrain(true);
                         break;
-                    case "-fuse":
+                    case "-fusion":
                         fuse = true;
                         multiRanker = new MultiRanker();
                         if (args.length - i >= 1) {
+                            multiRanker.setFusion(true);
                             multiRanker.setK(Float.parseFloat(args[++i]));
                         }
                         testConfig.addRanker(multiRanker);
                         break;
-                    case "-nofuse":
+                    case "-kmeans":
+                        ClusteringOptions cluster = new ClusteringOptions();
+                        if (ranker != null) {
+                            if (args.length - i >= 2) {
+                                cluster.setCluster(true);
+                                cluster.setNumClusters(Integer.parseInt(args[++i]));
+                                cluster.setNumClusteringDocs(Integer.parseInt(args[++i]));
+                            }
+                            ranker.setClustering(cluster);
+                        }
+                        break;
+                    case "-nofusion":
                         fuse = false;
                         break;
                     case "-r":
@@ -330,20 +361,19 @@ public class Main {
                         break;
                     case "-expand":
                         Expand exp = new Expand(0.5, true);
-                        if (args.length - i >= 1) {
+                        if (args.length - 1 >= 3) {
+                            exp.setNumTerms(Integer.parseInt(args[++i]));
+                            exp.setNumExpansionDocs(Integer.parseInt(args[++i]));
                             exp.setWeight(Float.parseFloat(args[++i]));
                             if (ranker != null) {
                                 ranker.setExpand(exp);
                             }
                         }
                         break;
-                    case "-noexpand":
-                        if (ranker != null) {
-                            ranker.setExpand(new Expand(0, false));
-                        }
-                        break;
                     case "-h":
                     case "--help":
+                        return null;
+                    default:
                         return null;
                 }
             }

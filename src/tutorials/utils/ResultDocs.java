@@ -39,6 +39,11 @@ public class ResultDocs implements Comparable<ResultDocs> {
 		return rank;
 	}
 
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+
+
 	public static String getConstQo() {
 		return CONST_QO;
 	}

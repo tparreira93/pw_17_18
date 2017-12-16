@@ -11,7 +11,7 @@ public class RankFusion {
     public RankFusion() {
     }
 
-    public List<ResultDocs> Fuse(MultiRanker multiRanker) {
+    public List<ResultDocs> Fuse(MultiRanker multiRanker, int top) {
         List<ResultDocs> result = new ArrayList<>();
         float k = multiRanker.getK();
         Map<LocalDate, Object> dayDigests = new HashMap<>();
@@ -50,7 +50,7 @@ public class RankFusion {
                     for (ResultDocs doc : resultDocs) {
                         long docId = doc.getDocId();
                         int rank = doc.getRank();
-                        float score = 1 / (k + rank);
+                        float score = Math.round((1 / (k + rank)) * 100f) /100f;
 
                         if(docScores.containsKey(docId))
                         {
@@ -76,10 +76,13 @@ public class RankFusion {
                 list.sort((o1, o2) -> Float.compare(o2.getValue().getScore(), o1.getValue().getScore()));
                 int i = 0;
                 for (Map.Entry<Long, ResultDocs> res : list) {
-                    if(i == 10)
+                    if(i == top - 1)
                         break;
-                    result.add(res.getValue());
-                    i++;
+
+                    ResultDocs tmp = res.getValue();
+                    tmp.setRank(++i);
+
+                    result.add(tmp);
                 }
             }
         }

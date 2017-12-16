@@ -42,7 +42,7 @@ public class LineChart extends ApplicationFrame {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 		for (DataSetTrec trec : t) {
-			for (Map.Entry<String, Float> entry : trec.getPages().entrySet()) {
+			for (Map.Entry<String, Float> entry : trec.getPrecisions().entrySet()) {
 
 				dataset.addValue(entry.getValue(), trec.getName(), entry.getKey());
 			}

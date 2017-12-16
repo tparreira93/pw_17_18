@@ -16,13 +16,9 @@ import org.apache.lucene.analysis.shingle.ShingleFilter;
 import org.apache.lucene.analysis.snowball.SnowballFilter;
 import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import tutorials.configurations.AnalyzerConfiguration;
 import tutorials.configurations.AnalyzerConfiguration;
 
-import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 
 /**
  * @author jmag

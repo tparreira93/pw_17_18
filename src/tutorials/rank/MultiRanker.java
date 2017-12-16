@@ -6,12 +6,12 @@ import tutorials.utils.DataSetTrec;
 import tutorials.utils.ResultDocs;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class MultiRanker {
     private List<Ranker> rankers;
     private float k;
+    private boolean fusion;
 
     public MultiRanker() {
         rankers = new ArrayList<>();
@@ -42,27 +42,26 @@ public class MultiRanker {
     public String toString() {
         String name = "";
         for (Ranker ranker : rankers) {
-            if(rankers.size() > 1)
+            if(name.length() != 0)
                 name += "+";
-            name += ranker.getName();
-            if (ranker.getExpand().isExpand())
-                name += " (alfa=" + Math.round(ranker.getExpand().getWeight() * 100f) / 100f +")";
+            name += ranker.toString();
         }
-        if(rankers.size() > 1)
+        if (rankers.size() > 1) {
             name = "[" + name + "]";
+            if(isFusion())
+                name += "(K=" + k + ")";
+        }
 
         return name;
     }
 
-    public DataSetTrec createTrec(String resultsFiles, String expectedResults, List<ResultDocs> resultsDocs) {
+    public DataSetTrec createTrec(String resultsFiles, String expectedResults, List<ResultDocs> resultsDocs, int runID) {
         BufferedWriter out = null;
         String result = "";
 
         String q = ResultDocs.CONST_QO;
-        String run = ResultDocs.CONST_RUN;
         for (ResultDocs r : resultsDocs) {
-            result += r.getQueryId() + " " + q + " " + r.getDocId() + " " + r.getRank() + " " + r.getScore() + " "
-                    + run + "\n";
+            result += r.getQueryId() + " " + q + " " + r.getDocId() + " " + r.getRank() + " " + r.getScore() + " " + runID + "\n";
         }
 
         try {
@@ -103,7 +102,7 @@ public class MultiRanker {
                 }
 
                 if (k.contains("P_")) {
-                    trec.addPage(values[0].split("_")[1], Float.parseFloat(values[values.length - 1]));
+                    trec.addPrecision(values[0].split("_")[1], Float.parseFloat(values[values.length - 1]));
                 }
 
             }
@@ -114,4 +113,35 @@ public class MultiRanker {
         return trec;
     }
 
+    public boolean isFusion() {
+        return fusion;
+    }
+
+    public void setFusion(boolean fusion) {
+        this.fusion = fusion;
+    }
+
+    public List<ResultDocs> getResults(int top) {
+        List<ResultDocs> result = new ArrayList<>();
+
+        for (Ranker ranker : getRankers()) {
+            List<DailyDigest> digests = ranker.getDigests();
+
+            for (DailyDigest digest : digests) {
+                List<ProfileDigest> profileDigests = digest.getDigests();
+
+                for (ProfileDigest profileDigest : profileDigests) {
+                    List<ResultDocs> resultDocs = profileDigest.getResultDocs();
+                    Collections.sort(resultDocs);
+
+                    int count = resultDocs.size();
+                    if(count >= top)
+                        count = top;
+
+                    result.addAll(resultDocs.subList(0, count));
+                }
+            }
+        }
+        return result;
+    }
 }

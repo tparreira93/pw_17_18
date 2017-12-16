@@ -5,7 +5,6 @@ import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.search.similarities.Similarity;
 import tutorials.analyzer.TestAnalyzer;
 import tutorials.rank.DailyDigest;
-import tutorials.utils.ResultDocs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,18 +15,19 @@ public class Ranker {
     private Similarity similarityConfiguration;
     private Boolean index;
     private Expand expand;
+    private ClusteringOptions cluster;
     private UUID id;
-    private String name;
-    private List<ResultDocs> results;
+    private String indexName;
     private List<DailyDigest> dailyDigests;
 
-    public Ranker(String rankerName) {
+    public Ranker(String indexName) {
         analyzerConfiguration = new AnalyzerConfiguration();
         similarityConfiguration = null;
         expand = new Expand();
+        cluster = new ClusteringOptions();
         index = false;
         id = UUID.randomUUID();
-        name = rankerName;
+        this.indexName = indexName;
         dailyDigests = new ArrayList<>();
     }
 
@@ -45,23 +45,27 @@ public class Ranker {
 
     @Override
     public String toString() {
-        if(name.isEmpty())
-            return similarityConfiguration.toString();
-        else
-            return name;
+        String str = "";
+        str += similarityConfiguration.toString();
+        if(cluster.isCluster())
+            str += " " + cluster.toString();
+
+        if (getExpand().isExpand()) {
+            if(cluster.isCluster())
+                str += " and";
+            str += " " + expand.toString();
+        }
+
+        return str;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public String getIndexName() {
+        return indexName;
     }
 
     public String getIndexPath()
     {
-        return "INDEX_" + getName();
+        return "INDEX_" + getIndexName();
     }
 
     public Boolean createIndex() {
@@ -98,7 +102,11 @@ public class Ranker {
         this.similarityConfiguration = sim;
     }
 
-    public void setResults(List<ResultDocs> results) {
-        this.results = results;
+    public void setClustering(ClusteringOptions cluster) {
+        this.cluster = cluster;
+    }
+
+    public ClusteringOptions getClustering() {
+        return cluster;
     }
 }

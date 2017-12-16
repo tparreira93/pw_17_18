@@ -1,10 +1,10 @@
 package tutorials.configurations;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
-
 public class Expand {
     private double weight;
     private boolean expand;
+    private int numTerms;
+    private int numExpansionDocs;
 
     public Expand(double weight, boolean expand) {
         this.weight = weight;
@@ -34,6 +34,22 @@ public class Expand {
 
     @Override
     public String toString() {
-        return expand ? "Expansion " + String.format("%2.f", weight) : "";
+        return expand ? "Expansion(terms=" + getNumTerms() + "|relevant=" + getNumExpansionDocs() + "|alfa=" + Math.round(getWeight() * 100f) / 100f + ")" : "";
+    }
+
+    public int getNumTerms() {
+        return numTerms;
+    }
+
+    public void setNumTerms(int numTerms) {
+        this.numTerms = numTerms;
+    }
+
+    public int getNumExpansionDocs() {
+        return numExpansionDocs;
+    }
+
+    public void setNumExpansionDocs(int numExpansionDocs) {
+        this.numExpansionDocs = numExpansionDocs;
     }
 }

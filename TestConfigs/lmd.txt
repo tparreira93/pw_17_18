@@ -1,0 +1,17 @@
+-f
+"E:\datasets\PW-Project\tweets\rts2016-qrels-tweets2016.jsonl"
+-q
+"E:\datasets\PW-Project\profiles\TREC2016-RTS-topics.json"
+-e
+"E:\datasets\rts2016-qrels.txt"
+-split -train
+-r "TWEETS" -lmd 1000
+-r "TWEETS" -lmd 1100
+-r "TWEETS" -lmd 1200
+-r "TWEETS" -lmd 1300
+-r "TWEETS" -lmd 1400
+-r "TWEETS" -lmd 1500
+-r "TWEETS" -lmd 1600
+-r "TWEETS" -lmd 1800
+-r "TWEETS" -lmd 1900
+-r "TWEETS" -lmd 2000

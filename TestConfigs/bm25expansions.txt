@@ -1,0 +1,12 @@
+-f
+"E:\datasets\PW-Project\tweets\rts2016-qrels-tweets2016.jsonl"
+-q
+"E:\datasets\PW-Project\profiles\TREC2016-RTS-topics.json"
+-e
+"E:\datasets\rts2016-qrels.txt"
+-split -train
+-r "TWEETS" -bm25 1.2 0.75
+-r "TWEETS" -bm25 1.2 0.75 -expand 5 10 0.6
+-r "TWEETS" -bm25 1.2 0.75 -expand 5 10 0.7
+-r "TWEETS" -bm25 1.2 0.75 -expand 5 10 0.8
+-r "TWEETS" -bm25 1.2 0.75 -expand 5 10 0.9
