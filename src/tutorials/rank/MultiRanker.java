@@ -61,7 +61,7 @@ public class MultiRanker {
 
         String q = ResultDocs.CONST_QO;
         for (ResultDocs r : resultsDocs) {
-            result += r.getQueryId() + " " + q + " " + r.getDocId() + " " + r.getRank() + " " + r.getScore() + " " + runID + "\n";
+            result += r.getQueryId() + " " + q + " " + r.getDocId() + " " + r.getRank() + " " + r.getScore() + " " + runID + " " + runID + "\n";
         }
 
         try {

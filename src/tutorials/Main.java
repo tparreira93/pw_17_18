@@ -10,10 +10,7 @@ import tutorials.configurations.*;
 import tutorials.indexer.TwitterIndexer;
 import tutorials.rank.MultiRanker;
 import tutorials.rank.RankFusion;
-import tutorials.utils.CSVUtils;
-import tutorials.utils.DataSetTrec;
-import tutorials.utils.LineChart;
-import tutorials.utils.ResultDocs;
+import tutorials.utils.*;
 
 import java.io.FileWriter;
 import java.io.IOException;

@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a7e068fa-8e69-413f-82ee-2ffc815432d5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/tutorials/configurations/JaccardConfiguration.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PW Project/evaluation/rts2016-batchB-eval.py" afterPath="$PROJECT_DIR$/PW Project/evaluation/rts2016-batchB-eval.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/Main.java" afterPath="$PROJECT_DIR$/src/tutorials/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/configurations/Ranker.java" afterPath="$PROJECT_DIR$/src/tutorials/configurations/Ranker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java" afterPath="$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java" afterPath="$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,11 +23,31 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tutorials/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="214">
-              <caret line="380" column="0" lean-forward="false" selection-start-line="380" selection-start-column="0" selection-end-line="380" selection-end-column="0" />
+            <state relative-caret-position="152">
+              <caret line="87" column="52" lean-forward="true" selection-start-line="87" selection-start-column="52" selection-end-line="87" selection-end-column="52" />
               <folding>
-                <element signature="method#main#0;class#Main#0" expanded="false" />
+                <marker date="1513443791315" expanded="false" signature="5575:8682" ph="{...}" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CommandLine.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/tutorials/utils/CommandLine.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="95">
+              <caret line="6" column="18" lean-forward="false" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MultiRanker.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="95">
+              <caret line="57" column="23" lean-forward="false" selection-start-line="57" selection-start-column="23" selection-end-line="57" selection-end-column="23" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -68,10 +87,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TwitterIndexer.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TwitterIndexer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
+            <state relative-caret-position="2667">
               <caret line="392" column="14" lean-forward="false" selection-start-line="392" selection-start-column="14" selection-end-line="392" selection-end-column="14" />
               <folding>
                 <element signature="method#TwitterIndexer#0;class#TwitterIndexer#0" expanded="false" />
@@ -157,7 +176,12 @@
       <find>Expansion</find>
       <find>-kmeans</find>
       <find>fusion</find>
+      <find>-fuse</find>
+      <find>\\\\</find>
     </findStrings>
+    <replaceStrings>
+      <replace>\\</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -173,7 +197,6 @@
         <option value="$PROJECT_DIR$/src/tutorials/analyzer/CustomAnalyzer.java" />
         <option value="$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java" />
         <option value="$PROJECT_DIR$/src/tutorials/rank/ResultsRanker.java" />
-        <option value="$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java" />
         <option value="$PROJECT_DIR$/src/tutorials/utils/DataSetTrec.java" />
         <option value="$PROJECT_DIR$/src/tutorials/rank/RankFusion.java" />
         <option value="$PROJECT_DIR$/src/tutorials/clustering/KMeans.java" />
@@ -184,8 +207,9 @@
         <option value="$PROJECT_DIR$/src/tutorials/indexer/ExpansionTerm.java" />
         <option value="$PROJECT_DIR$/src/tutorials/configurations/JaccardConfiguration.java" />
         <option value="$PROJECT_DIR$/src/tutorials/configurations/Ranker.java" />
-        <option value="$PROJECT_DIR$/src/tutorials/Main.java" />
         <option value="$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/Main.java" />
       </list>
     </option>
   </component>
@@ -278,7 +302,7 @@
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="tutorials.Main" />
       <option name="VM_PARAMETERS" value="-Xmx1g" />
-      <option name="PROGRAM_PARAMETERS" value="-f &quot;E:\datasets\PW-Project\tweets\rts2016-qrels-tweets2016.jsonl&quot; -q &quot;E:\datasets\PW-Project\profiles\TREC2016-RTS-topics.json&quot; -e &quot;E:\datasets\rts2016-qrels.txt&quot; -split -train -r &quot;TWEETS&quot; -classic -r &quot;TWEETS&quot; -classic -expand 5 10 0.5 -kmeans 50 100 -jaccard 90 -r &quot;TWEETS&quot; -classic -expand 5 10 0.7" />
+      <option name="PROGRAM_PARAMETERS" value="-f &quot;E:\datasets\PW-Project\tweets\rts2016-qrels-tweets2016.jsonl&quot; -q &quot;E:\datasets\PW-Project\profiles\TREC2016-RTS-topics.json&quot; -e &quot;E:\datasets\rts2016-qrels.txt&quot; -fuse 60 -r &quot;BM25&quot; -index -bm25 1.2 0.75 -r &quot;LMD&quot; -index -lmd 2000 -r &quot;Classic&quot; -classic" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
@@ -388,12 +412,18 @@
       <option name="project" value="LOCAL" />
       <updated>1513438756066</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Parametros para o jaccard.">
+      <created>1513440222731</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1513440222731</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1060" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -403,8 +433,8 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32975295" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -424,12 +454,39 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Corrigi o pseudo-relevant feedback&#10;Adicionei parametros para o kmeans&#10;Melhorei e corrigi algumas coisas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Corrigi o pseudo-relevant feedback&#10;Adicionei parametros para o kmeans&#10;Melhorei e corrigi algumas coisas" />
+    <MESSAGE value="Parametros para o jaccard." />
+    <option name="LAST_COMMIT_MESSAGE" value="Parametros para o jaccard." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -446,8 +503,20 @@
           <properties />
           <option name="timeStamp" value="27" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/tutorials/Main.java</url>
+          <line>24</line>
+          <properties />
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/tutorials/Main.java</url>
+          <line>202</line>
+          <properties />
+          <option name="timeStamp" value="60" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="58" />
+      <option name="time" value="61" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -456,14 +525,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/io/Reader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="50" column="22" lean-forward="false" selection-start-line="50" selection-start-column="22" selection-end-line="50" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/document/StoredField.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="456">
@@ -521,7 +582,7 @@
         <state relative-caret-position="931">
           <caret line="71" column="39" lean-forward="false" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
           <folding>
-            <element signature="method#main#0;class#Main#0" expanded="false" />
+            <marker date="1513443791315" expanded="false" signature="5575:8682" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -793,14 +854,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="141" column="0" lean-forward="false" selection-start-line="141" selection-start-column="0" selection-end-line="141" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tutorials/rank/RankFusion.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
@@ -914,19 +967,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="380" column="0" lean-forward="false" selection-start-line="380" selection-start-column="0" selection-end-line="380" selection-end-column="0" />
-          <folding>
-            <element signature="method#main#0;class#Main#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
+        <state relative-caret-position="2667">
           <caret line="392" column="14" lean-forward="false" selection-start-line="392" selection-start-column="14" selection-end-line="392" selection-end-column="14" />
           <folding>
             <element signature="method#TwitterIndexer#0;class#TwitterIndexer#0" expanded="false" />
@@ -939,6 +982,32 @@
             <element signature="method#getQueryTerms#0;class#TwitterIndexer#0" expanded="false" />
             <element signature="method#parseScoreDocs#1;class#TwitterIndexer#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/utils/CommandLine.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="6" column="18" lean-forward="false" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="87" column="52" lean-forward="true" selection-start-line="87" selection-start-column="52" selection-end-line="87" selection-end-column="52" />
+          <folding>
+            <marker date="1513443791315" expanded="false" signature="5575:8682" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="57" column="23" lean-forward="false" selection-start-line="57" selection-start-column="23" selection-end-line="57" selection-end-column="23" />
+          <folding />
         </state>
       </provider>
     </entry>
