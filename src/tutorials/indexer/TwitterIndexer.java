@@ -12,6 +12,8 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+
+import tutorials.clustering.Jaccard;
 import tutorials.clustering.KMeans;
 import tutorials.configurations.Expand;
 import tutorials.configurations.Ranker;
@@ -30,7 +32,7 @@ import java.util.*;
 public class TwitterIndexer {
     private final static int QUERYEXPASION_SEARCH = 10;
     private final static int QUERYEXPASION_TOPDOCS = 5;
-    private final static int SEARCH_RESULTS = 25;
+    private final static int SEARCH_RESULTS = 10;
 
     private Map<LocalDate, IndexWriter> indexes = new HashMap<>();
     private List<String> createdIndexes = new ArrayList<>();
@@ -180,13 +182,11 @@ public class TwitterIndexer {
                     resultsSize = ranker.getClustering().getNumClusteringDocs();
 
                 TopDocs results = searcher.search(query, resultsSize);
-                List<ScoreDoc> documentResults = new ArrayList<>(Arrays.asList(results.scoreDocs));
 
-                if(ranker.getJaccard().isJaccard())
-                    documentResults = nearDuplicateDetection(documentResults);
+                List<ScoreDoc> documentResults = nearDuplicateDetection(new ArrayList<ScoreDoc>(Arrays.asList(results.scoreDocs)),analyzer,searcher);
 
-                if(ranker.getClustering().isCluster())
-                    documentResults = KMeans.clusterData(documentResults, searcher, ranker.getClustering());
+              /*  if(ranker.getClustering().isCluster())
+                    documentResults = KMeans.clusterData(documentResults, searcher, ranker.getClustering());*/
 
                 resultsDocs = parseScoreDocs(searcher, documentResults, profile);
             } catch (org.apache.lucene.queryparser.classic.ParseException e) {
@@ -207,8 +207,9 @@ public class TwitterIndexer {
         return new ProfileDigest(profile, resultsDocs);
     }
 
-    private List<ScoreDoc> nearDuplicateDetection(List<ScoreDoc> scoreDocs) {
-        return scoreDocs;
+    private List<ScoreDoc> nearDuplicateDetection(List<ScoreDoc> scoreDocs, Analyzer analyzer, IndexSearcher searcher) throws IOException {
+    	
+        return Jaccard.process(analyzer,searcher,scoreDocs);
     }
 
     private List<ScoreDoc> reorderTweets(List<ScoreDoc> scoreDocs) {
