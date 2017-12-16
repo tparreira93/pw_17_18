@@ -12,8 +12,13 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+
+import tutorials.clustering.Jaccard;
+import tutorials.clustering.KMeans;
 import tutorials.configurations.Expand;
 import tutorials.configurations.Ranker;
+import tutorials.rank.DailyDigest;
+import tutorials.rank.ProfileDigest;
 import tutorials.utils.*;
 import twitter4j.Status;
 
@@ -25,348 +30,370 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class TwitterIndexer {
-	public final static int TOP = 100;
-	private final static int TOPDOCS = 25;
-	public final static int NUMDOCS = 10;
-	private final static int NUM_TOP_WORDS = 5;
+    private final static int QUERYEXPASION_SEARCH = 10;
+    private final static int QUERYEXPASION_TOPDOCS = 5;
+    private final static int SEARCH_RESULTS = 10;
 
-	private Map<LocalDate, IndexWriter> indexes = new HashMap<>();
-	private LocalDate startDate;
-	private LocalDate endDate;
-	private DateTimeFormatter formatter;
-	public TwitterIndexer(LocalDate startDate, LocalDate endDate) {
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-	}
+    private Map<LocalDate, IndexWriter> indexes = new HashMap<>();
+    private List<String> createdIndexes = new ArrayList<>();
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private DateTimeFormatter formatter;
 
-	private String getPath(Ranker config, LocalDate date) {
-		return config.getIndexPath() + "\\" + date.format(formatter);
-	}
+    public TwitterIndexer(LocalDate startDate, LocalDate endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate date = startDate;
 
-	public void openIndex(Ranker config) {
-		try {
+        while (date.isBefore(endDate) || date.isEqual(endDate)) {
+            indexes.put(date, null);
+            date = date.plusDays(1);
+        }
+    }
 
-			indexes.clear();
-			LocalDate date = startDate;
-			while (date.isBefore(endDate) || date.isEqual(endDate))
-			{
-				// ====================================================
-				// Select the data analyser to tokenise document data
+    private String getPath(Ranker config, LocalDate date) {
+        return config.getIndexPath() + "\\" + date.format(formatter);
+    }
 
-				// ====================================================
-				// Configure the index to be created/opened
-				//
-				// IndexWriterConfig has many options to be set if needed.
-				//
-				// Example: for better indexing performance, if you
-				// are indexing many documents, increase the RAM
-				// buffer. But if you do this, increase the max heap
-				// size to the JVM (eg add -Xmx512m or -Xmx1g):
-				//
-				// iwc.setRAMBufferSizeMB(256.0);
-				IndexWriterConfig iwc = new IndexWriterConfig(config.getAnalyzer());
-				if (config.createIndex()) {
-					// Create a new index, removing any
-					// previously indexed documents:
-					iwc.setOpenMode(OpenMode.CREATE);
-				} else {
-					// Add new documents to an existing index:
-					iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
-				}
+    public boolean openIndex(Ranker config) {
+        if (createdIndexes.contains(config.getIndexPath())) {
+            return false;
+        }
 
-				Directory dir = FSDirectory.open(Paths.get(getPath(config, date)));
-				IndexWriter idx = new IndexWriter(dir, iwc);
-				indexes.put(date, idx);
-				date = date.plusDays(1);
-			}
+        try {
+            indexes.clear();
+            LocalDate date = startDate;
+            while (date.isBefore(endDate) || date.isEqual(endDate)) {
+                // ====================================================
+                // Select the data analyser to tokenise document data
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+                // ====================================================
+                // Configure the index to be created/opened
+                //
+                // IndexWriterConfig has many options to be set if needed.
+                //
+                // Example: for better indexing performance, if you
+                // are indexing many documents, increase the RAM
+                // buffer. But if you do this, increase the max heap
+                // size to the JVM (eg add -Xmx512m or -Xmx1g):
+                //
+                // iwc.setRAMBufferSizeMB(256.0);
+                IndexWriterConfig iwc = new IndexWriterConfig(config.getAnalyzer());
+                if (config.createIndex()) {
+                    // Create a new index, removing any
+                    // previously indexed documents:
+                    iwc.setOpenMode(OpenMode.CREATE);
+                } else {
+                    // Add new documents to an existing index:
+                    iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
+                }
 
-	}
+                Directory dir = FSDirectory.open(Paths.get(getPath(config, date)));
+                IndexWriter idx = new IndexWriter(dir, iwc);
+                indexes.put(date, idx);
+                date = date.plusDays(1);
+                createdIndexes.add(config.getIndexPath());
+            }
 
-	public void indexTweets(List<Status> tweets) {
-		for (Status tweet : tweets) {
-			indexDoc(tweet);
-		}
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	private void indexDoc(Status status) {
+        return true;
+    }
 
-		Document doc = new Document();
+    public void indexTweets(List<Status> tweets) {
+        for (Status tweet : tweets) {
+            indexDoc(tweet);
+        }
+    }
 
-		try {
-			doc.add(new LongPoint("Id", status.getId()));
-			doc.add(new StoredField("Id", status.getId()));
-			doc.add(new LongPoint("UserId", status.getUser().getId()));
-			doc.add(new StringField("CreationDate", formatter.format(status.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()), Field.Store.YES));
-			doc.add(new TextField("Body", status.getText(), Field.Store.YES));
+    private void indexDoc(Status status) {
 
-			LocalDate date = status.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-			for (Map.Entry<LocalDate, IndexWriter> entry : indexes.entrySet()) {
-				LocalDate indexDate = entry.getKey();
-				IndexWriter idx = entry.getValue();
-				if (date.isBefore(indexDate) || date.isEqual(indexDate)) {
-					addOrUpdate(idx, doc, status.getId());
-				}
-			}
-		} catch (IOException e) {
-			System.out.println("Error adding document " + status.getId());
-		} catch (Exception e) {
-			System.out.println("Error parsing document " + status.getId());
-		}
-	}
+        Document doc = new Document();
 
-	private void addOrUpdate(IndexWriter idx, Document doc, long id) throws IOException {
-		// ====================================================
-		// Add the document to the index
-		if (idx.getConfig().getOpenMode() == OpenMode.CREATE) {
-			idx.addDocument(doc);
+        try {
+            doc.add(new LongPoint("Id", status.getId()));
+            doc.add(new StoredField("Id", status.getId()));
+            doc.add(new LongPoint("UserId", status.getUser().getId()));
+            doc.add(new StringField("CreationDate", formatter.format(status.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()), Field.Store.YES));
+            doc.add(new TextField("Body", status.getText(), Field.Store.YES));
 
-		} else {
-			idx.updateDocument(new Term("Id", ((Long)id).toString()), doc);
-		}
-	}
+            LocalDate date = status.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            for (Map.Entry<LocalDate, IndexWriter> entry : indexes.entrySet()) {
+                LocalDate indexDate = entry.getKey();
+                IndexWriter idx = entry.getValue();
+                if (date.isBefore(indexDate) || date.isEqual(indexDate)) {
+                    addOrUpdate(idx, doc, status.getId());
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error adding document " + status.getId());
+        } catch (Exception e) {
+            System.out.println("Error parsing document " + status.getId());
+            e.printStackTrace();
+        }
+    }
 
-	// ====================================================
-	// ANNOTATE THIS METHOD YOURSELF
-	public void indexSearch(Ranker config, List<JSONProfile> profiles) {
-		Set<LocalDate> dates = indexes.keySet();
-		for (LocalDate date : dates) {
-			search(config, date, profiles);
-		}
-	}
+    private void addOrUpdate(IndexWriter idx, Document doc, long id) throws IOException {
+        // ====================================================
+        // Add the document to the index
+        if (idx.getConfig().getOpenMode() == OpenMode.CREATE) {
+            idx.addDocument(doc);
 
-	private void search(Ranker config, LocalDate date, List<JSONProfile> profiles) {
-		Analyzer analyzer = config.getAnalyzer();
-		Similarity similarity = config.getSimilarityConfiguration();
-		IndexReader reader = null;
-		IndexSearcher searcher;
-		try {
-			reader = DirectoryReader.open(FSDirectory.open(Paths.get(getPath(config, date))));
-			searcher = new IndexSearcher(reader);
-			List<ResultDocs> resultsDocs = new LinkedList<>();
+        } else {
+            idx.updateDocument(new Term("Id", ((Long) id).toString()), doc);
+        }
+    }
 
-			searcher.setSimilarity(similarity);
+    // ====================================================
+    // ANNOTATE THIS METHOD YOURSELF
+    public void indexSearch(Ranker ranker, List<JSONProfile> profiles) {
+        Set<LocalDate> dates = indexes.keySet();
 
-			for (JSONProfile profile : profiles) {
-				Query query;
-				try {
-					query = createQuery(profile.getTitle(), date, config.getExpand(), analyzer, searcher);
-					TopDocs results = searcher.search(query, NUMDOCS);
+        for (LocalDate date : dates) {
+            DailyDigest digest = new DailyDigest(date);
 
-					List<ScoreDoc> documentResults = nearDuplicateDetection(new ArrayList<>(Arrays.asList(results.scoreDocs)));
+            for (JSONProfile profile : profiles) {
+                ProfileDigest results = searchProfile(ranker, date, profile);
+                digest.addProfileDigest(results);
+            }
+            ranker.addDailyDigest(digest);
+        }
+    }
 
-					documentResults = reorderTweets(documentResults);
+    private ProfileDigest searchProfile(Ranker ranker, LocalDate date, JSONProfile profile) {
+        Analyzer analyzer = ranker.getAnalyzer();
+        Similarity similarity = ranker.getSimilarityConfiguration();
+        IndexReader reader = null;
+        IndexSearcher searcher;
+        List<ResultDocs> resultsDocs = new LinkedList<>();
+        try {
+            reader = DirectoryReader.open(FSDirectory.open(Paths.get(getPath(ranker, date))));
+            searcher = new IndexSearcher(reader);
 
-					for (ScoreDoc sc : documentResults) {
-						Document doc = searcher.doc(sc.doc);
-						Integer Id = doc.getField("Id").numericValue().intValue();
-						resultsDocs.add(new ResultDocs(profile.getTopicID(), Id, sc.score, doc));
-					}
+            searcher.setSimilarity(similarity);
+            Query query;
+            try {
+                query = createQuery(profile.getTitle(), date, ranker.getExpand(), analyzer, searcher, reader);
+                int resultsSize = SEARCH_RESULTS;
+                if(ranker.getClustering().isCluster())
+                    resultsSize = ranker.getClustering().getNumClusteringDocs();
 
-					config.setResults(resultsDocs);
-				} catch (org.apache.lucene.queryparser.classic.ParseException e) {
-					System.out.println("Error parsing query string.");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally {
-			try {
-				if (reader != null) {
-					reader.close();
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-	}
+                TopDocs results = searcher.search(query, resultsSize);
 
-	private List<ScoreDoc> nearDuplicateDetection(List<ScoreDoc> scoreDocs) {
-		return scoreDocs;
-	}
+                List<ScoreDoc> documentResults = nearDuplicateDetection(new ArrayList<ScoreDoc>(Arrays.asList(results.scoreDocs)),analyzer,searcher);
 
-	private List<ScoreDoc> reorderTweets(List<ScoreDoc> scoreDocs) {
-		return scoreDocs;
-	}
+              /*  if(ranker.getClustering().isCluster())
+                    documentResults = KMeans.clusterData(documentResults, searcher, ranker.getClustering());*/
 
-	public void close() {
-		try {
-			for (Map.Entry<LocalDate, IndexWriter> entry : indexes.entrySet()) {
-				IndexWriter idx = entry.getValue();
-				idx.close();
-			}
-		} catch (IOException e) {
-			System.out.println("Error closing the index.");
-		}
-	}
+                resultsDocs = parseScoreDocs(searcher, documentResults, profile);
+            } catch (org.apache.lucene.queryparser.classic.ParseException e) {
+                System.out.println("Error parsing query string.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
 
+        return new ProfileDigest(profile, resultsDocs);
+    }
 
-	private Query createQuery(String queryText, LocalDate date, Expand expand, Analyzer analyzer, IndexSearcher searcher) throws ParseException {
-		Query query;
-		QueryParser parser;
+    private List<ScoreDoc> nearDuplicateDetection(List<ScoreDoc> scoreDocs, Analyzer analyzer, IndexSearcher searcher) throws IOException {
+    	
+        return Jaccard.process(analyzer,searcher,scoreDocs);
+    }
 
-		BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
-		queryBuilder.add(new TermQuery(new Term("CreationDate", formatter.format(date))), BooleanClause.Occur.MUST);
-		if (expand.isExpand())
-			queryBuilder.add(expandQuery(queryText, searcher, analyzer, expand.getWeight()), BooleanClause.Occur.SHOULD);
-		else {
-			parser = new QueryParser("Body", analyzer);
-			queryBuilder.add(parser.parse(queryText), BooleanClause.Occur.SHOULD);
-		}
+    private List<ScoreDoc> reorderTweets(List<ScoreDoc> scoreDocs) {
+        return scoreDocs;
+    }
 
-		query = queryBuilder.build();
+    public void close() {
+        try {
+            for (Map.Entry<LocalDate, IndexWriter> entry : indexes.entrySet()) {
+                IndexWriter idx = entry.getValue();
+                idx.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error closing the index.");
+        }
+    }
 
-		return query;
-	}
+    private Query createQuery(String queryText, LocalDate date, Expand expand, Analyzer analyzer, IndexSearcher searcher, IndexReader reader) throws ParseException, IOException {
+        Query query;
+        QueryParser parser = new QueryParser("Body", analyzer);
 
-	private Query expandQuery(String line, IndexSearcher searcher, Analyzer analyzer, double weight)
-			throws org.apache.lucene.queryparser.classic.ParseException {
-		Query query;
-		QueryParser parser = new QueryParser("Body", analyzer);
-		BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
-		Map<String, Integer> expansionTerms = getExpansionTerms(searcher, line, TOP, analyzer);
+        BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
+        queryBuilder.add(new TermQuery(new Term("CreationDate", formatter.format(date))), BooleanClause.Occur.MUST);
+        if (expand.isExpand())
+            queryBuilder.add(expandQuery(queryText, searcher, reader, analyzer, expand), BooleanClause.Occur.SHOULD);
+        else {
+            queryBuilder.add(parser.parse(queryText), BooleanClause.Occur.SHOULD);
+        }
+        query = queryBuilder.build();
 
-		Query q = parser.parse(line);
-		queryBuilder.add(q, BooleanClause.Occur.SHOULD);
+        return query;
+    }
 
-		int idx = 0;
-		expansionTerms = sortByValue(expansionTerms);
-		StringBuilder lineBuilder = new StringBuilder(line);
-		for (Map.Entry<String, Integer> entry : expansionTerms.entrySet()) {
-			BoostQuery boost = new BoostQuery(new TermQuery(new Term(entry.getKey())), (float)weight);
-			queryBuilder.add(boost, BooleanClause.Occur.SHOULD);
-			lineBuilder.append(" ").append(entry.getKey()).append("^").append(weight);
-			if(idx == NUM_TOP_WORDS)
-				break;
-			idx++;
-		}
-		line = lineBuilder.toString();
-		//query = queryBuilder.build();
-        query = parser.parse(line);
+    private List<String> getQueryTerms(String query, Analyzer analyzer) throws IOException {
+        List<String> queryTerms = new ArrayList<>();
+        String newQuery = query.replaceAll("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "");
+        TokenStream stream = analyzer.tokenStream("field", new StringReader(newQuery));
+        CharTermAttribute termAtt = stream.addAttribute(CharTermAttribute.class);
+        try {
+            stream.reset();
+            while (stream.incrementToken()) {
+                queryTerms.add(termAtt.toString());
+                stream.end();
+            }
+        } finally {
+            stream.close();
+        }
 
+        return queryTerms;
+    }
 
-		return query;
-	}
+    private Query expandQuery(String line, IndexSearcher searcher, IndexReader reader, Analyzer analyzer, Expand expand)
+            throws org.apache.lucene.queryparser.classic.ParseException, IOException {
+        Query query;
+        String field = "Body";
+        BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
+        List<String> queryTerms = getQueryTerms(line, analyzer);
+        List<ExpansionTerm> expansionTerms = getExpansionTerms(searcher, reader, line, expand.getNumExpansionDocs(), analyzer);
 
-	private Map<String, Integer> sortByValue(Map<String, Integer> unsortMap) {
+        for (String term : queryTerms) {
+            BoostQuery boost = new BoostQuery(new TermQuery(new Term(field, term)), (float) expand.getWeight());
+            queryBuilder.add(boost, BooleanClause.Occur.SHOULD);
+        }
 
-		// 1. Convert Map to List of Map
-		List<Map.Entry<String, Integer>> list = new LinkedList<>(unsortMap.entrySet());
+        int idx = 0;
+        Collections.sort(expansionTerms);
+        for (ExpansionTerm entry : expansionTerms) {
+            if (queryTerms.contains(entry.getTerm())) {
+                continue;
+            }
+            /*int docFreq = reader.docFreq(new Term(field, term));
+            int numDocs = reader.numDocs();
 
-		list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
+            float idf = (float)Math.log(numDocs / (docFreq + 1));*/
+            BoostQuery boost = new BoostQuery(new TermQuery(new Term(field, entry.getTerm())), (1.0f - (float) expand.getWeight()));
+            queryBuilder.add(boost, BooleanClause.Occur.SHOULD);
 
-		Map<String, Integer> sortedMap = new LinkedHashMap<>();
-		for (Map.Entry<String, Integer> entry : list) {
-			sortedMap.put(entry.getKey(), entry.getValue());
-		}
-		return sortedMap;
-	}
-
-	private List<ResultDocs> parseScoreDocs(IndexSearcher searcher, ScoreDoc[] scores)
-	{
-		List<ResultDocs> resultsDocs = new LinkedList<>();
-
-		for (ScoreDoc c : scores) {
-			try {
-				Document doc = searcher.doc(c.doc);
-				Integer Id = doc.getField("Id").numericValue().intValue();
-				resultsDocs.add(new ResultDocs("1", Id, c.score, doc));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		Collections.sort(resultsDocs);
-
-		return resultsDocs;
-	}
-
-	private Map<String, Integer> getExpansionTerms(IndexSearcher searcher, String queryString, int numExpDocs,
-												   Analyzer analyzer) {
-
-		Map<String, Integer> topTerms = new HashMap<>();
-
-		try {
-			QueryParser parser = new QueryParser("Body", analyzer);
-			Query query;
-			try {
-				query = parser.parse(queryString);
-			} catch (org.apache.lucene.queryparser.classic.ParseException e) {
-				System.out.println("Error parsing query string.");
-				return null;
-			}
-
-			TopDocs results = searcher.search(query, numExpDocs);
-			ScoreDoc[] hits = results.scoreDocs;
-
-			System.out.println(queryString);
-			List<ResultDocs> resultDocs = parseScoreDocs(searcher, hits);
-
-			TokenStream stream = analyzer.tokenStream("field", new StringReader(queryString));
-			CharTermAttribute termAtt = stream.addAttribute(CharTermAttribute.class);
-			Map<String, Integer> queryTerms = new HashMap<>();
-			try {
-				stream.reset();
-				while (stream.incrementToken()) {
-					String term = termAtt.toString();
-					Integer termCount = topTerms.get(term);
-					if (termCount == null)
-						topTerms.put(term, 1);
-					else
-						topTerms.put(term, ++termCount);
-					stream.end();
-				}
-				} finally {
-					stream.close();
-				}
+            if (idx == expand.getNumTerms() - 1)
+                break;
+            idx++;
+        }
+        query = queryBuilder.build();
+        //query = parser.parse(line);
 
 
-			int numTotalHits = results.totalHits;
-			System.out.println(numTotalHits + " total matching documents");
+        return query;
+    }
+
+    private Map<String, Float> sortByValue(Map<String, Float> unsortMap) {
+
+        // 1. Convert Map to List of Map
+        List<Map.Entry<String, Float>> list = new LinkedList<>(unsortMap.entrySet());
+
+        list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
+
+        Map<String, Float> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<String, Float> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
+    }
+
+    private List<ResultDocs> parseScoreDocs(IndexSearcher searcher, List<ScoreDoc> scores) {
+        return parseScoreDocs(searcher, scores, null);
+    }
+
+    private List<ResultDocs> parseScoreDocs(IndexSearcher searcher, List<ScoreDoc> scores, JSONProfile profile) {
+        List<ResultDocs> resultsDocs = new LinkedList<>();
+        int i = 0;
+        for (ScoreDoc c : scores) {
+            try {
+                Document doc = searcher.doc(c.doc);
+                Long Id = doc.getField("Id").numericValue().longValue();
+                resultsDocs.add(new ResultDocs(profile != null ? profile.getTopicID() : "", Id, c.score, doc, i++));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Collections.sort(resultsDocs);
+
+        return resultsDocs;
+    }
+
+    private List<ExpansionTerm> getExpansionTerms(IndexSearcher searcher, IndexReader reader, String queryString, int numExpDocs,
+                                                   Analyzer analyzer) throws IOException {
+        List<ExpansionTerm> expansionTerms = new ArrayList<>();
+        Map<String, ExpansionTerm> topTerms = new HashMap<>();
+
+        QueryParser parser = new QueryParser("Body", analyzer);
+        Query query;
+        try {
+            query = parser.parse(queryString);
+            //query = createQuery(queryString, date, new Expand(), analyzer, searcher, reader);
+        } catch (org.apache.lucene.queryparser.classic.ParseException e) {
+            System.out.println("Error parsing query string.");
+            return null;
+        }
 
 
-			for (int j = 0; j < resultDocs.size(); j++) {
-				Document doc = resultDocs.get(j).getDoc();
-				String answer = doc.get("Body");
-				Integer AnswerId = doc.getField("Id").numericValue().intValue();
+        TopDocs results = searcher.search(query, numExpDocs);
+        ScoreDoc[] hits = results.scoreDocs;
 
-				stream = analyzer.tokenStream("field", new StringReader(answer));
+        List<ResultDocs> resultDocs = parseScoreDocs(searcher, Arrays.asList(hits));
 
-				// get the CharTermAttribute from the TokenStream
-				termAtt = stream.addAttribute(CharTermAttribute.class);
+        for (int j = 0; j < resultDocs.size(); j++) {
+            Document doc = resultDocs.get(j).getDoc();
+            String answer = doc.get("Body");
 
-				try {
-					stream.reset();
-                    while (stream.incrementToken()) {
-                        String term = termAtt.toString();
-                        Integer termCount = topTerms.get(term);
-                        if(j < TOPDOCS && queryTerms.get(term) == null) {
-                            if (termCount == null)
-                                topTerms.put(term, 1);
-                            else
-                                topTerms.put(term, ++termCount);
-                        } else if (TOP - TOPDOCS > 0 && j > (TOP - TOPDOCS) && termCount != null) {
-							/*int docFreq = reader.docFreq(new Term("Body", term));
-							int numDocs = reader.numDocs();
-
-							double idf = Math.log(numDocs / (docFreq + 1));*/
-							topTerms.remove(term);
-							//topTerms.put(term, (int)(termCount * idf));
+            List<String> terms = getQueryTerms(answer, analyzer);
+            List<String> docFreq = new ArrayList<>();
+            for (String term : terms) {
+                ExpansionTerm expTerm = topTerms.get(term);
+                if (j < numExpDocs) {
+                    if (expTerm == null) {
+                        expTerm = new ExpansionTerm();
+                        expTerm.setTerm(term);
+                        expTerm.setDocFreq(1);
+                        expTerm.setTermFreq(1);
+                        docFreq.add(term);
+                        expansionTerms.add(expTerm);
+                        topTerms.put(term, expTerm);
+                    } else {
+                        if (!docFreq.contains(term)) {
+                            docFreq.add(term);
+                            expTerm.setDocFreq(expTerm.getDocFreq() + 1);
                         }
+                        expTerm.setTermFreq(expTerm.getTermFreq() + 1);
                     }
-					stream.end();
-				} finally {
-					stream.close();
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return topTerms;
-	}
+                }
+            }
+        }
+
+        for (ExpansionTerm entry : expansionTerms) {
+            //int docFreq = reader.docFreq(new Term("Body", entry.getKey()));
+            //int numDocs = reader.numDocs();
+            int docFreq = entry.getDocFreq();
+            int numDocs = topTerms.size();
+
+            Float idf = (float)Math.log((float)numDocs / (docFreq + 1));
+            //topTerms.put(term, --termCount);
+            //entry.setScore(entry.getTermFreq() * idf);
+            entry.setScore(entry.getTermFreq());
+        }
+        return expansionTerms;
+    }
 }
