@@ -5,6 +5,7 @@ import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.search.similarities.LMDirichletSimilarity;
 import org.apache.lucene.search.similarities.LMJelinekMercerSimilarity;
 import org.jfree.ui.RefineryUtilities;
+import tutorials.clustering.Jaccard;
 import tutorials.configurations.*;
 import tutorials.indexer.TwitterIndexer;
 import tutorials.rank.MultiRanker;
@@ -194,6 +195,8 @@ public class Main {
         System.out.println("-kmeans: KMeans clustering");
         System.out.println("\t clusters int");
         System.out.println("\t numClusteringDocs int");
+        System.out.println("-jaccard: Jaccard duplicate detection");
+        System.out.println("\t threashold float");
     }
 
     private static TestConfig parseConfig(String[] args) {
@@ -367,6 +370,16 @@ public class Main {
                             exp.setWeight(Float.parseFloat(args[++i]));
                             if (ranker != null) {
                                 ranker.setExpand(exp);
+                            }
+                        }
+                        break;
+                    case "-jaccard":
+                        JaccardConfiguration jacc = new JaccardConfiguration();
+                        if (args.length - 1 >= 1) {
+                            jacc.setJaccard(true);
+                            jacc.setSimilarity(Float.parseFloat(args[++i]));
+                            if (ranker != null) {
+                                ranker.setJaccard(jacc);
                             }
                         }
                         break;

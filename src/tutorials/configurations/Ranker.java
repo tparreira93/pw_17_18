@@ -20,10 +20,13 @@ public class Ranker {
     private String indexName;
     private List<DailyDigest> dailyDigests;
 
+    private JaccardConfiguration jaccard;
+
     public Ranker(String indexName) {
         analyzerConfiguration = new AnalyzerConfiguration();
         similarityConfiguration = null;
         expand = new Expand();
+        jaccard = new JaccardConfiguration();
         cluster = new ClusteringOptions();
         index = false;
         id = UUID.randomUUID();
@@ -108,5 +111,13 @@ public class Ranker {
 
     public ClusteringOptions getClustering() {
         return cluster;
+    }
+
+    public void setJaccard(JaccardConfiguration jaccard) {
+        this.jaccard = jaccard;
+    }
+
+    public JaccardConfiguration getJaccard() {
+        return jaccard;
     }
 }

@@ -180,8 +180,10 @@ public class TwitterIndexer {
                     resultsSize = ranker.getClustering().getNumClusteringDocs();
 
                 TopDocs results = searcher.search(query, resultsSize);
+                List<ScoreDoc> documentResults = new ArrayList<>(Arrays.asList(results.scoreDocs));
 
-                List<ScoreDoc> documentResults = nearDuplicateDetection(new ArrayList<>(Arrays.asList(results.scoreDocs)));
+                if(ranker.getJaccard().isJaccard())
+                    documentResults = nearDuplicateDetection(documentResults);
 
                 if(ranker.getClustering().isCluster())
                     documentResults = KMeans.clusterData(documentResults, searcher, ranker.getClustering());
