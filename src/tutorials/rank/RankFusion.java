@@ -59,7 +59,7 @@ public class RankFusion {
                         }
                         else
                         {
-                            ResultDocs res = new ResultDocs(doc.getQueryId(), doc.getDocId(), score, doc.getDoc(), 1);
+                            ResultDocs res = new ResultDocs(doc.getQueryId(), doc.getDocId(), score, doc.getDoc(), 1, date);
                             docScores.put(docId, res);
                         }
                     }
@@ -67,7 +67,7 @@ public class RankFusion {
             }
         }
 
-        // Depois de ter os scores todos criados ordenasse pelos scores e limitasse o número de resultados a 10 por profile
+        // Depois de ter os scores todos criados ordenasse pelos scores e limitasse o n�mero de resultados a 10 por profile
         for (Map.Entry<LocalDate, Object> day : dayDigests.entrySet()) {
             profileDocs = (Map<JSONProfile, Object>) day.getValue();
             for (Map.Entry<JSONProfile, Object> profile : profileDocs.entrySet()) {

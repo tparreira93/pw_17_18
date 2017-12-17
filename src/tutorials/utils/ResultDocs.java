@@ -1,6 +1,7 @@
 package tutorials.utils;
 
 import org.apache.lucene.document.Document;
+import java.time.LocalDate;
 
 public class ResultDocs implements Comparable<ResultDocs> {
 	private String queryId;
@@ -10,13 +11,23 @@ public class ResultDocs implements Comparable<ResultDocs> {
 	private int rank;
 	private float score;
 	private Document doc;
+	private LocalDate date;
 
-	public ResultDocs(String queryId, long docId, float score, Document doc, int rankPos) {
+	public ResultDocs(String queryId, long docId, float score, Document doc, int rankPos, LocalDate date) {
 		this.queryId = queryId;
 		this.docId = docId;
 		this.score = score;
 		this.rank = rankPos;
 		this.doc = doc;
+		this.date = date;
+	}
+
+	public LocalDate getDate(){
+		return date;
+	}
+
+	public void setDate(LocalDate date){
+		this.date = date;
 	}
 
 	public Document getDoc(){

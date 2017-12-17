@@ -188,7 +188,7 @@ public class TwitterIndexer {
               /*  if(ranker.getClustering().isCluster())
                     documentResults = KMeans.clusterData(documentResults, searcher, ranker.getClustering());*/
 
-                resultsDocs = parseScoreDocs(searcher, documentResults, profile);
+                resultsDocs = parseScoreDocs(searcher, documentResults, profile, date);
             } catch (org.apache.lucene.queryparser.classic.ParseException e) {
                 System.out.println("Error parsing query string.");
             }
@@ -298,32 +298,19 @@ public class TwitterIndexer {
         return query;
     }
 
-    private Map<String, Float> sortByValue(Map<String, Float> unsortMap) {
-
-        // 1. Convert Map to List of Map
-        List<Map.Entry<String, Float>> list = new LinkedList<>(unsortMap.entrySet());
-
-        list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
-
-        Map<String, Float> sortedMap = new LinkedHashMap<>();
-        for (Map.Entry<String, Float> entry : list) {
-            sortedMap.put(entry.getKey(), entry.getValue());
-        }
-        return sortedMap;
-    }
 
     private List<ResultDocs> parseScoreDocs(IndexSearcher searcher, List<ScoreDoc> scores) {
-        return parseScoreDocs(searcher, scores, null);
+        return parseScoreDocs(searcher, scores, null, null);
     }
 
-    private List<ResultDocs> parseScoreDocs(IndexSearcher searcher, List<ScoreDoc> scores, JSONProfile profile) {
+    private List<ResultDocs> parseScoreDocs(IndexSearcher searcher, List<ScoreDoc> scores, JSONProfile profile, LocalDate date) {
         List<ResultDocs> resultsDocs = new LinkedList<>();
         int i = 0;
         for (ScoreDoc c : scores) {
             try {
                 Document doc = searcher.doc(c.doc);
                 Long Id = doc.getField("Id").numericValue().longValue();
-                resultsDocs.add(new ResultDocs(profile != null ? profile.getTopicID() : "", Id, c.score, doc, i++));
+                resultsDocs.add(new ResultDocs(profile != null ? profile.getTopicID() : "", Id, c.score, doc, i++, date));
             } catch (IOException e) {
                 e.printStackTrace();
             }
