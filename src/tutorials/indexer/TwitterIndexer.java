@@ -183,10 +183,13 @@ public class TwitterIndexer {
 
                 TopDocs results = searcher.search(query, resultsSize);
 
-                List<ScoreDoc> documentResults = nearDuplicateDetection(new ArrayList<ScoreDoc>(Arrays.asList(results.scoreDocs)),analyzer,searcher);
+                List<ScoreDoc> documentResults = new ArrayList<>(Arrays.asList(results.scoreDocs));
 
-              /*  if(ranker.getClustering().isCluster())
-                    documentResults = KMeans.clusterData(documentResults, searcher, ranker.getClustering());*/
+                if(ranker.getJaccard().isJaccard())
+                    documentResults = nearDuplicateDetection(documentResults,analyzer,searcher);
+
+                if(ranker.getClustering().isCluster())
+                    documentResults = KMeans.clusterData(documentResults, searcher, ranker.getClustering());
 
                 resultsDocs = parseScoreDocs(searcher, documentResults, profile, date);
             } catch (org.apache.lucene.queryparser.classic.ParseException e) {
@@ -210,10 +213,6 @@ public class TwitterIndexer {
     private List<ScoreDoc> nearDuplicateDetection(List<ScoreDoc> scoreDocs, Analyzer analyzer, IndexSearcher searcher) throws IOException {
     	
         return Jaccard.process(analyzer,searcher,scoreDocs);
-    }
-
-    private List<ScoreDoc> reorderTweets(List<ScoreDoc> scoreDocs) {
-        return scoreDocs;
     }
 
     public void close() {
@@ -305,7 +304,7 @@ public class TwitterIndexer {
 
     private List<ResultDocs> parseScoreDocs(IndexSearcher searcher, List<ScoreDoc> scores, JSONProfile profile, LocalDate date) {
         List<ResultDocs> resultsDocs = new LinkedList<>();
-        int i = 0;
+        int i = 1;
         for (ScoreDoc c : scores) {
             try {
                 Document doc = searcher.doc(c.doc);

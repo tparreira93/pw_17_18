@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a7e068fa-8e69-413f-82ee-2ffc815432d5" name="Default" comment="Mais um argmento no ficheiro tmp.txt para se poder utilizar o evaluation">
+    <list default="true" id="a7e068fa-8e69-413f-82ee-2ffc815432d5" name="Default" comment="Opção para o jaccard.&#10;Ordenacao para dos profiles por id nos results.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/Main.java" afterPath="$PROJECT_DIR$/src/tutorials/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/clustering/Jaccard.java" afterPath="$PROJECT_DIR$/src/tutorials/clustering/Jaccard.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java" afterPath="$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java" afterPath="$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java" afterPath="$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/rank/RankFusion.java" afterPath="$PROJECT_DIR$/src/tutorials/rank/RankFusion.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java" afterPath="$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tutorials/utils/JSONProfile.java" afterPath="$PROJECT_DIR$/src/tutorials/utils/JSONProfile.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,46 +27,47 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/tutorials/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="91" column="23" lean-forward="true" selection-start-line="91" selection-start-column="23" selection-end-line="91" selection-end-column="23" />
+            <state relative-caret-position="213">
+              <caret line="85" column="47" lean-forward="true" selection-start-line="85" selection-start-column="47" selection-end-line="85" selection-end-column="47" />
               <folding>
+                <element signature="method#writeCSV#0;class#Main#0" expanded="false" />
+                <element signature="method#plotTrecs#0;class#Main#0" expanded="false" />
+                <element signature="method#plot#0;class#Main#0" expanded="false" />
                 <element signature="method#printUsage#0;class#Main#0" expanded="false" />
+                <element signature="method#parseConfig#0;class#Main#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CommandLine.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tutorials/utils/CommandLine.java">
+      <file leaf-file-name="RankFusion.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/tutorials/rank/RankFusion.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="6" column="18" lean-forward="false" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+            <state relative-caret-position="158">
+              <caret line="95" column="67" lean-forward="false" selection-start-line="95" selection-start-column="67" selection-end-line="95" selection-end-column="67" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MultiRanker.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java">
+      <file leaf-file-name="TwitterReader.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/tutorials/twitter/TwitterReader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="71" column="19" lean-forward="false" selection-start-line="71" selection-start-column="19" selection-end-line="71" selection-end-column="19" />
+            <state relative-caret-position="76">
+              <caret line="13" column="13" lean-forward="false" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Ranker.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/Ranker.java">
+      <file leaf-file-name="Integer.java" pinned="false" current-in-tab="false">
+        <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/lang/Integer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="28" column="45" lean-forward="false" selection-start-line="28" selection-start-column="45" selection-end-line="28" selection-end-column="45" />
+            <state relative-caret-position="182">
+              <caret line="1214" column="15" lean-forward="false" selection-start-line="1214" selection-start-column="15" selection-end-line="1214" selection-end-column="15" />
               <folding>
-                <element signature="method#getAnalyzer#0;class#Ranker#0" expanded="false" />
-                <element signature="e#2893#2894#0" expanded="true" />
-                <element signature="e#2931#2932#0" expanded="true" />
-                <element signature="e#2979#2980#0" expanded="true" />
-                <element signature="e#3009#3010#0" expanded="true" />
+                <element signature="e#46394#46395#0" expanded="true" />
+                <element signature="e#46458#46459#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -71,13 +76,9 @@
       <file leaf-file-name="JaccardConfiguration.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/JaccardConfiguration.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="76">
-              <caret line="4" column="23" lean-forward="false" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
+            <state relative-caret-position="285">
+              <caret line="19" column="16" lean-forward="false" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
               <folding>
-                <element signature="e#167#168#0" expanded="true" />
-                <element signature="e#200#201#0" expanded="true" />
-                <element signature="e#251#252#0" expanded="true" />
-                <element signature="e#295#296#0" expanded="true" />
                 <element signature="e#329#330#0" expanded="true" />
                 <element signature="e#361#362#0" expanded="true" />
                 <element signature="e#408#409#0" expanded="true" />
@@ -87,44 +88,44 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="JSONProfile.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/tutorials/utils/JSONProfile.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="367">
+              <caret line="50" column="27" lean-forward="false" selection-start-line="50" selection-start-column="27" selection-end-line="50" selection-end-column="27" />
+              <folding>
+                <element signature="e#1139#1140#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestConfig.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="526">
+              <caret line="184" column="86" lean-forward="false" selection-start-line="184" selection-start-column="86" selection-end-line="184" selection-end-column="86" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="TwitterIndexer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="301" column="83" lean-forward="false" selection-start-line="301" selection-start-column="83" selection-end-line="301" selection-end-column="83" />
+            <state relative-caret-position="785">
+              <caret line="197" column="31" lean-forward="true" selection-start-line="197" selection-start-column="31" selection-end-line="197" selection-end-column="31" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RankFusion.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tutorials/rank/RankFusion.java">
+      <file leaf-file-name="MultiRanker.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-570">
-              <caret line="14" column="52" lean-forward="false" selection-start-line="14" selection-start-column="52" selection-end-line="14" selection-end-column="52" />
+            <state relative-caret-position="2242">
+              <caret line="140" column="29" lean-forward="false" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ResultDocs.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-228">
-              <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Jaccard.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tutorials/clustering/Jaccard.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2109">
-              <caret line="111" column="27" lean-forward="false" selection-start-line="111" selection-start-column="27" selection-end-line="111" selection-end-column="27" />
-              <folding>
-                <marker date="1513470676759" expanded="true" signature="3114:3117" ph="{...}" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -153,6 +154,14 @@
       <find>fusion</find>
       <find>-fuse</find>
       <find>\\\\</find>
+      <find>Analyzer</find>
+      <find>System.out.</find>
+      <find>FINAL</find>
+      <find>System.out</find>
+      <find>top</find>
+      <find>10</find>
+      <find>ResultDocs</find>
+      <find>-jaccard</find>
     </findStrings>
     <replaceStrings>
       <replace>\\</replace>
@@ -173,7 +182,6 @@
         <option value="$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java" />
         <option value="$PROJECT_DIR$/src/tutorials/rank/ResultsRanker.java" />
         <option value="$PROJECT_DIR$/src/tutorials/utils/DataSetTrec.java" />
-        <option value="$PROJECT_DIR$/src/tutorials/rank/RankFusion.java" />
         <option value="$PROJECT_DIR$/src/tutorials/clustering/KMeans.java" />
         <option value="$PROJECT_DIR$/src/tutorials/configurations/Clustering.java" />
         <option value="$PROJECT_DIR$/src/tutorials/configurations/DocsClustering.java" />
@@ -182,9 +190,13 @@
         <option value="$PROJECT_DIR$/src/tutorials/indexer/ExpansionTerm.java" />
         <option value="$PROJECT_DIR$/src/tutorials/configurations/JaccardConfiguration.java" />
         <option value="$PROJECT_DIR$/src/tutorials/configurations/Ranker.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/clustering/Jaccard.java" />
         <option value="$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java" />
-        <option value="$PROJECT_DIR$/src/tutorials/Main.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/utils/JSONProfile.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/rank/RankFusion.java" />
         <option value="$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java" />
+        <option value="$PROJECT_DIR$/src/tutorials/Main.java" />
       </list>
     </option>
   </component>
@@ -209,9 +221,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="AndroidView" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -222,11 +231,6 @@
             <path>
               <item name="pw_2017_2018" type="b2602c69:ProjectViewProjectNode" />
               <item name="pw_2017_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="PW Project" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="pw_2017_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pw_2017_2018" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -234,13 +238,6 @@
               <item name="pw_2017_2018" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="tutorials" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="pw_2017_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pw_2017_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="tutorials" type="462c0819:PsiDirectoryNode" />
-              <item name="indexer" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="pw_2017_2018" type="b2602c69:ProjectViewProjectNode" />
@@ -250,7 +247,10 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="AndroidView" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -259,6 +259,162 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.20528968" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Checkpoints/PW_Project" />
+  </component>
+  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
+    <UpdatedFiles>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Updated from server" />
+        <option name="myStatusName" value="Changed on server" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="CHANGED_ON_SERVER" />
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated" />
+          <option name="myStatusName" value="Changed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/README.md</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/tutorials/Main.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/tutorials/rank/RankFusion.java</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Created" />
+          <option name="myStatusName" value="Created" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CREATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/.vs/PW Project/v15/.suo</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/.vs/ProjectSettings.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/.vs/VSWorkspaceState.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/.vs/config/applicationhost.config</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/.vs/slnx.sqlite</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/evaluation/.vs/ProjectSettings.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/evaluation/.vs/VSWorkspaceState.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/evaluation/.vs/config/applicationhost.config</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/evaluation/.vs/evaluation/v15/.suo</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/evaluation/.vs/slnx.sqlite</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/evaluation/rts2016-available-tweets.txt</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/evaluation/rts2016-batch-clusters.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/evaluation/rts2016-batch-tweets2dayepoch.txt</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/evaluation/rts2016-batchB-eval.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/evaluation/rts2016-clusters.txt</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/evaluation/rts2016-glosses.txt</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/evaluation/rts2016-qrels.txt</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/profiles/TREC2015-MB-eval-topics.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/profiles/TREC2015-MB-noeval-topics-culled.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PWProject/profiles/TREC2016-RTS-topics.json</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Deleted" />
+          <option name="myStatusName" value="Deleted" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="true" />
+          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/.vs/PW Project/v15/.suo</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/.vs/ProjectSettings.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/.vs/VSWorkspaceState.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/.vs/config/applicationhost.config</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/.vs/slnx.sqlite</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/evaluation/.vs/ProjectSettings.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/evaluation/.vs/VSWorkspaceState.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/evaluation/.vs/config/applicationhost.config</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/evaluation/.vs/evaluation/v15/.suo</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/evaluation/.vs/slnx.sqlite</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/evaluation/rts2016-available-tweets.txt</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/evaluation/rts2016-batch-clusters.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/evaluation/rts2016-batch-tweets2dayepoch.txt</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/evaluation/rts2016-batchB-eval.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/evaluation/rts2016-clusters.txt</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/evaluation/rts2016-glosses.txt</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/evaluation/rts2016-qrels.txt</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/profiles/TREC2015-MB-eval-topics.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/profiles/TREC2015-MB-noeval-topics-culled.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/profiles/TREC2016-RTS-topics.json</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/tweets/rts2016-qrels-tweets2016.jsonl</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/PW Project/tweets/rts2016-qrels-tweets2016.jsonl.gz</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Restored" />
+          <option name="myStatusName" value="Will be restored" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="RESTORED" />
+        </FILE-GROUP>
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Modified" />
+        <option name="myStatusName" value="Modified" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MODIFIED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Skipped" />
+        <option name="myStatusName" value="Skipped" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SKIPPED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with conflicts" />
+        <option name="myStatusName" value="Will be merged with conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_CONFLICTS" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with tree conflicts" />
+        <option name="myStatusName" value="Merged with tree conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with property conflicts" />
+        <option name="myStatusName" value="Will be merged with property conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged" />
+        <option name="myStatusName" value="Will be merged" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Not in repository" />
+        <option name="myStatusName" value="Not in repository" />
+        <option name="mySupportsDeletion" value="true" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="UNKNOWN" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally added" />
+        <option name="myStatusName" value="Locally added" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_ADDED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally removed" />
+        <option name="myStatusName" value="Locally removed" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_REMOVED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Switched" />
+        <option name="myStatusName" value="Switched" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SWITCHED" />
+      </FILE-GROUP>
+    </UpdatedFiles>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -277,7 +433,7 @@
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="tutorials.Main" />
       <option name="VM_PARAMETERS" value="-Xmx1g" />
-      <option name="PROGRAM_PARAMETERS" value="-f &quot;E:\datasets\PW-Project\tweets\rts2016-qrels-tweets2016.jsonl&quot; -q &quot;E:\datasets\PW-Project\profiles\TREC2016-RTS-topics.json&quot; -e &quot;E:\datasets\rts2016-qrels.txt&quot; -fusion 60 -r &quot;TWEETS&quot; -bm25 1.2 0.75 -r &quot;TWEETS&quot; -lmd 2000 -nofusion -r &quot;TWEETS&quot; -classic" />
+      <option name="PROGRAM_PARAMETERS" value="-f &quot;E:\datasets\PW-Project\tweets\rts2016-qrels-tweets2016.jsonl&quot; -q &quot;E:\datasets\PW-Project\profiles\TREC2016-RTS-topics.json&quot; -e &quot;E:\datasets\rts2016-qrels.txt&quot; -r &quot;TWEETS&quot; -bm25 1.2 0.75 -expand 10 5 -0.8 -r &quot;TWEETS&quot; -lmd 1800 -expand 10 5 -0.8" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
@@ -401,7 +557,14 @@
       <option name="project" value="LOCAL" />
       <updated>1513443852297</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Adicionado a data do tweet.">
+      <created>1513472605624</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1513472605624</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -414,21 +577,22 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5021482" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32906976" sideWeight="0.49785176" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.49785176" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Graph Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26852846" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2803437" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Graph Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32906976" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -436,7 +600,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32975295" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -472,7 +635,8 @@
     <MESSAGE value="Corrigi o pseudo-relevant feedback&#10;Adicionei parametros para o kmeans&#10;Melhorei e corrigi algumas coisas" />
     <MESSAGE value="Parametros para o jaccard." />
     <MESSAGE value="Mais um argmento no ficheiro tmp.txt para se poder utilizar o evaluation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Mais um argmento no ficheiro tmp.txt para se poder utilizar o evaluation" />
+    <MESSAGE value="Adicionado a data do tweet." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adicionado a data do tweet." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -497,12 +661,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/tutorials/Main.java</url>
-          <line>87</line>
+          <line>383</line>
           <properties />
-          <option name="timeStamp" value="61" />
+          <option name="timeStamp" value="64" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="62" />
+      <option name="time" value="66" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -511,35 +675,16 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$PROJECT_DIR$/../../lucene-6.4.2/libs/lucene-core-6.4.2.jar!/org/apache/lucene/document/FloatPoint.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="16" column="19" lean-forward="false" selection-start-line="16" selection-start-column="19" selection-end-line="16" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2546">
-          <caret line="134" column="78" lean-forward="true" selection-start-line="134" selection-start-column="78" selection-end-line="134" selection-end-column="78" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3078">
-          <caret line="162" column="74" lean-forward="false" selection-start-line="162" selection-start-column="74" selection-end-line="162" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tutorials/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="931">
           <caret line="71" column="39" lean-forward="false" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
           <folding>
+            <element signature="method#writeCSV#0;class#Main#0" expanded="false" />
+            <element signature="method#plotTrecs#0;class#Main#0" expanded="false" />
+            <element signature="method#plot#0;class#Main#0" expanded="false" />
             <element signature="method#printUsage#0;class#Main#0" expanded="false" />
+            <element signature="method#parseConfig#0;class#Main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -578,11 +723,8 @@
         <state relative-caret-position="665">
           <caret line="59" column="23" lean-forward="false" selection-start-line="59" selection-start-column="23" selection-end-line="59" selection-end-column="23" />
           <folding>
-            <element signature="method#getAnalyzer#0;class#Ranker#0" expanded="false" />
-            <element signature="e#2893#2894#0" expanded="true" />
-            <element signature="e#2931#2932#0" expanded="true" />
-            <element signature="e#2979#2980#0" expanded="true" />
-            <element signature="e#3009#3010#0" expanded="true" />
+            <element signature="e#1150#1151#0" expanded="true" />
+            <element signature="e#1190#1191#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -612,13 +754,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="13" column="13" lean-forward="false" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/AnalyzerConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -734,21 +869,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="123" column="0" lean-forward="false" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
-          <folding>
-            <element signature="e#3254#3255#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/lang/Float.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
           <caret line="450" column="0" lean-forward="false" selection-start-line="450" selection-start-column="0" selection-end-line="450" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -773,13 +897,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/lang/Integer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="51" column="19" lean-forward="false" selection-start-line="51" selection-start-column="19" selection-end-line="51" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tutorials/indexer/ExpansionTerm.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
@@ -795,10 +912,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
           <caret line="139" column="57" lean-forward="false" selection-start-line="139" selection-start-column="57" selection-end-line="139" selection-end-column="57" />
-          <folding>
-            <element signature="e#5644#5645#0" expanded="false" />
-            <element signature="e#5675#5676#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -821,55 +934,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/clustering/KMeans.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="19" column="90" lean-forward="false" selection-start-line="19" selection-start-column="90" selection-end-line="19" selection-end-column="90" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/clustering/Jaccard.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2109">
-          <caret line="111" column="27" lean-forward="false" selection-start-line="111" selection-start-column="27" selection-end-line="111" selection-end-column="27" />
-          <folding>
-            <marker date="1513470676759" expanded="true" signature="3114:3117" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/JaccardConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="23" lean-forward="false" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
-          <folding>
-            <element signature="e#167#168#0" expanded="true" />
-            <element signature="e#200#201#0" expanded="true" />
-            <element signature="e#251#252#0" expanded="true" />
-            <element signature="e#295#296#0" expanded="true" />
-            <element signature="e#329#330#0" expanded="true" />
-            <element signature="e#361#362#0" expanded="true" />
-            <element signature="e#408#409#0" expanded="true" />
-            <element signature="e#443#444#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/Ranker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="28" column="45" lean-forward="false" selection-start-line="28" selection-start-column="45" selection-end-line="28" selection-end-column="45" />
-          <folding>
-            <element signature="method#getAnalyzer#0;class#Ranker#0" expanded="false" />
-            <element signature="e#2893#2894#0" expanded="true" />
-            <element signature="e#2931#2932#0" expanded="true" />
-            <element signature="e#2979#2980#0" expanded="true" />
-            <element signature="e#3009#3010#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tutorials/utils/CommandLine.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
@@ -878,52 +942,151 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java">
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="71" column="19" lean-forward="false" selection-start-line="71" selection-start-column="19" selection-end-line="71" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tutorials/rank/RankFusion.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-570">
-          <caret line="14" column="52" lean-forward="false" selection-start-line="14" selection-start-column="52" selection-end-line="14" selection-end-column="52" />
-          <folding />
+        <state relative-caret-position="-741">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tutorials/utils/ResultDocs.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-228">
-          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+        <state relative-caret-position="133">
+          <caret line="8" column="6" lean-forward="false" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/AnalyzerConfiguration.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-741">
+        <state relative-caret-position="199">
+          <caret line="31" column="20" lean-forward="false" selection-start-line="31" selection-start-column="19" selection-end-line="31" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/clustering/KMeans.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding>
+            <element signature="e#1303#1313#0" expanded="true" />
+            <element signature="e#1714#1724#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/Ranker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-133">
+          <caret line="36" column="16" lean-forward="false" selection-start-line="36" selection-start-column="16" selection-end-line="36" selection-end-column="16" />
+          <folding>
+            <element signature="e#1150#1151#0" expanded="true" />
+            <element signature="e#1190#1191#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/clustering/Jaccard.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-228">
+          <caret line="24" column="33" lean-forward="false" selection-start-line="24" selection-start-column="33" selection-end-line="24" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/rank/MultiRanker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2242">
+          <caret line="140" column="29" lean-forward="false" selection-start-line="140" selection-start-column="29" selection-end-line="140" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/TestConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="526">
+          <caret line="184" column="86" lean-forward="false" selection-start-line="184" selection-start-column="86" selection-end-line="184" selection-end-column="86" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/utils/JSONProfile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
+          <caret line="50" column="27" lean-forward="false" selection-start-line="50" selection-start-column="27" selection-end-line="50" selection-end-column="27" />
+          <folding>
+            <element signature="e#1139#1140#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_144/src.zip!/java/lang/Integer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="1214" column="15" lean-forward="false" selection-start-line="1214" selection-start-column="15" selection-end-line="1214" selection-end-column="15" />
+          <folding>
+            <element signature="e#46394#46395#0" expanded="true" />
+            <element signature="e#46458#46459#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/rank/RankFusion.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="95" column="67" lean-forward="false" selection-start-line="95" selection-start-column="67" selection-end-line="95" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/twitter/TwitterReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="13" column="13" lean-forward="false" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tutorials/configurations/JaccardConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="16" lean-forward="false" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
+          <folding>
+            <element signature="e#329#330#0" expanded="true" />
+            <element signature="e#361#362#0" expanded="true" />
+            <element signature="e#408#409#0" expanded="true" />
+            <element signature="e#443#444#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/tutorials/indexer/TwitterIndexer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="301" column="83" lean-forward="false" selection-start-line="301" selection-start-column="83" selection-end-line="301" selection-end-column="83" />
+        <state relative-caret-position="785">
+          <caret line="197" column="31" lean-forward="true" selection-start-line="197" selection-start-column="31" selection-end-line="197" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tutorials/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="91" column="23" lean-forward="true" selection-start-line="91" selection-start-column="23" selection-end-line="91" selection-end-column="23" />
+        <state relative-caret-position="213">
+          <caret line="85" column="47" lean-forward="true" selection-start-line="85" selection-start-column="47" selection-end-line="85" selection-end-column="47" />
           <folding>
+            <element signature="method#writeCSV#0;class#Main#0" expanded="false" />
+            <element signature="method#plotTrecs#0;class#Main#0" expanded="false" />
+            <element signature="method#plot#0;class#Main#0" expanded="false" />
             <element signature="method#printUsage#0;class#Main#0" expanded="false" />
+            <element signature="method#parseConfig#0;class#Main#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -139,8 +139,8 @@ public class MultiRanker {
                     int count = resultDocs.size();
                     if(count >= top)
                         count = top;
-                    System.out.println(count);
-                    result.addAll(resultDocs.subList(0, count+1));
+
+                    result.addAll(resultDocs.subList(0, count));
                 }
             }
         }

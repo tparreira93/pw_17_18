@@ -30,14 +30,10 @@ public class Jaccard {
 		List<ScoreDoc> temp = docs;
 		List<ScoreDoc> tested = new LinkedList<ScoreDoc>();
 
-		System.out.println("INICIAL" + temp.size());
-		System.out.println();
-
 		while (temp.size() > 0) {
 
 			Document d = searcher.doc(temp.get(0).doc);
 			String sentence = d.getField("Body").stringValue();
-			System.out.println(sentence);
 			StringReader reader = new StringReader(sentence);
 			TokenStream tokenStream = analyzer.tokenStream("content", reader);
 			ShingleFilter sf = new ShingleFilter(tokenStream);
@@ -75,8 +71,6 @@ public class Jaccard {
 			tested.add(temp.remove(0));
 
 		}
-		System.out.println();
-		System.out.println("FINAL" + tested.size());
 
 		return tested;
 

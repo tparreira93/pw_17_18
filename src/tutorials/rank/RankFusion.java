@@ -67,21 +67,20 @@ public class RankFusion {
             }
         }
 
-        // Depois de ter os scores todos criados ordenasse pelos scores e limitasse o n�mero de resultados a 10 por profile
+        // Depois de ter os scores todos criados ordenasse pelos scores e limitasse o número de resultados a 10 por profile
         for (Map.Entry<LocalDate, Object> day : dayDigests.entrySet()) {
-            profileDocs = (Map<JSONProfile, Object>) day.getValue();
+            profileDocs = sortByKey((Map<JSONProfile, Object>) day.getValue());
             for (Map.Entry<JSONProfile, Object> profile : profileDocs.entrySet()) {
                 docScores = (Map<Long, ResultDocs>) profile.getValue();
                 List<Map.Entry<Long, ResultDocs>> list = new LinkedList<>(docScores.entrySet());
                 list.sort((o1, o2) -> Float.compare(o2.getValue().getScore(), o1.getValue().getScore()));
-                int i = 0;
+                int i = 1;
                 for (Map.Entry<Long, ResultDocs> res : list) {
                     if(i == top)
                         break;
 
                     ResultDocs tmp = res.getValue();
-                    tmp.setRank(i+1);
-                    i++;
+                    tmp.setRank(i++);
 
                     result.add(tmp);
                 }
@@ -89,5 +88,21 @@ public class RankFusion {
         }
 
         return result;
+    }
+
+
+    private Map<JSONProfile, Object> sortByKey(Map<JSONProfile, Object> unsortMap) {
+
+        List<Map.Entry<JSONProfile, Object>> list = new LinkedList<>(unsortMap.entrySet());
+
+        Collections.sort(list, (o1, o2) -> Integer.compare((o2.getKey().getOrder()), o1.getKey().getOrder()));
+
+
+        Map<JSONProfile, Object> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<JSONProfile, Object> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedMap;
     }
 }

@@ -38,11 +38,17 @@ public class JSONProfile {
     private String title;
     private String description;
     private String narrative;
+    private int order;
 
-    public JSONProfile(String topicID, String title, String description, String narrative) {
+    public JSONProfile(String topicID, String title, String description, String narrative, int order) {
         this.topicID = topicID;
         this.title = title;
         this.description = description;
         this.narrative = narrative;
+        this.order = order;
+    }
+
+    public int getOrder() {
+        return order;
     }
 }

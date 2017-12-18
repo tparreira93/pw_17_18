@@ -86,10 +86,11 @@ public class Main {
 				DataSetTrec t = multiRanker.createTrec("tmp.txt", testConfig.getEvaluation(), resultDocs, run);
 				trecs.add(t);
 
-				multiRanker.createResults("results.txt", testConfig.getEvaluation(), resultDocs, run);
+				multiRanker.createResults("results" + run + ".txt", testConfig.getEvaluation(), resultDocs, run);
 
-				multiRanker.createDigests("digests.txt", testConfig.getEvaluation(), resultDocs, run++);
+				multiRanker.createDigests("digests" + run + ".txt", testConfig.getEvaluation(), resultDocs, run);
 
+				run++;
 				System.out.println("");
 				System.out.println("");
 				System.out.println(t.getName());
@@ -193,7 +194,7 @@ public class Main {
 		System.out.println("\t clusters int");
 		System.out.println("\t numClusteringDocs int");
 		System.out.println("-jaccard: Jaccard duplicate detection");
-		System.out.println("\t threashold float");
+		//System.out.println("\t threashold float");
 	}
 
 	private static TestConfig parseConfig(String[] args) {
@@ -381,13 +382,16 @@ public class Main {
 					break;
 				case "-jaccard":
 					JaccardConfiguration jacc = new JaccardConfiguration();
-					if (args.length - 1 >= 1) {
-						jacc.setJaccard(true);
+					jacc.setJaccard(true);
+					if (ranker != null) {
+						ranker.setJaccard(jacc);
+					}
+					/*if (args.length - 1 >= 1) {
 						jacc.setSimilarity(Float.parseFloat(args[++i]));
 						if (ranker != null) {
 							ranker.setJaccard(jacc);
 						}
-					}
+					}*/
 					break;
 				case "-h":
 				case "--help":

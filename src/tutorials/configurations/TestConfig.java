@@ -182,7 +182,7 @@ public class TestConfig {
 			String description = obj.getString("description");
 			String narrative = obj.getString("narrative");
 
-			JSONProfile profile = new JSONProfile(id, title, description, narrative);
+			JSONProfile profile = new JSONProfile(id, title, description, narrative, i);
 			if (!isSplitData() || ((i + 1) % 2 == 1)) {
 				testData.add(profile);
 			} else {
