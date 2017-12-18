@@ -76,11 +76,12 @@ public class RankFusion {
                 list.sort((o1, o2) -> Float.compare(o2.getValue().getScore(), o1.getValue().getScore()));
                 int i = 0;
                 for (Map.Entry<Long, ResultDocs> res : list) {
-                    if(i == top - 1)
+                    if(i == top)
                         break;
 
                     ResultDocs tmp = res.getValue();
-                    tmp.setRank(++i);
+                    tmp.setRank(i+1);
+                    i++;
 
                     result.add(tmp);
                 }

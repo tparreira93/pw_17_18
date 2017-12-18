@@ -6,6 +6,8 @@ import tutorials.utils.DataSetTrec;
 import tutorials.utils.ResultDocs;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class MultiRanker {
@@ -137,11 +139,69 @@ public class MultiRanker {
                     int count = resultDocs.size();
                     if(count >= top)
                         count = top;
-
-                    result.addAll(resultDocs.subList(0, count));
+                    System.out.println(count);
+                    result.addAll(resultDocs.subList(0, count+1));
                 }
             }
         }
         return result;
+    }
+
+    public void createResults(String resultsFiles, String expectedResults, List<ResultDocs> resultsDocs, int runID) {
+        BufferedWriter out = null;
+        String result = "";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+        
+        String q = ResultDocs.CONST_QO;
+        for (ResultDocs r : resultsDocs) {
+        	LocalDate rdate = r.getDate();
+        	String dateformat = (rdate).format(formatter);
+        	dateformat = dateformat.replace("-", "");
+            result +=  dateformat + " " +r.getQueryId() + " " + q + " " + r.getDocId() + " " + r.getRank() + " " + r.getScore() + " " + runID + "\n";
+        }
+
+        try {
+            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(resultsFiles)));
+            out.write(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+    
+    public void createDigests(String resultsFiles, String expectedResults, List<ResultDocs> resultsDocs, int runID) {
+        BufferedWriter out = null;
+        String result = "";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY");
+        
+        String q = ResultDocs.CONST_QO;
+        for (ResultDocs r : resultsDocs) {
+        	LocalDate rdate = r.getDate();
+        	String dateformat = (rdate).format(formatter);
+            result +=  dateformat + " " +r.getQueryId() + " " + r.getRank() + " " + runID + "\n" + r.getDoc().getField("Body").stringValue() + "\n\n";
+        }
+
+        try {
+            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(resultsFiles)));
+            out.write(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
