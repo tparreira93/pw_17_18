@@ -32,7 +32,7 @@ import java.util.*;
 public class TwitterIndexer {
     private final static int QUERYEXPASION_SEARCH = 10;
     private final static int QUERYEXPASION_TOPDOCS = 5;
-    private final static int SEARCH_RESULTS = 10;
+    private final static int SEARCH_RESULTS = 25;
 
     private Map<LocalDate, IndexWriter> indexes = new HashMap<>();
     private List<String> createdIndexes = new ArrayList<>();
@@ -180,16 +180,19 @@ public class TwitterIndexer {
                 int resultsSize = SEARCH_RESULTS;
                 if(ranker.getClustering().isCluster())
                     resultsSize = ranker.getClustering().getNumClusteringDocs();
-
+                System.out.println("QUERY FINAL:" + query.toString());
                 TopDocs results = searcher.search(query, resultsSize);
 
                 List<ScoreDoc> documentResults = new ArrayList<>(Arrays.asList(results.scoreDocs));
 
                 if(ranker.getJaccard().isJaccard())
                     documentResults = nearDuplicateDetection(documentResults,analyzer,searcher);
-
-                if(ranker.getClustering().isCluster())
-                    documentResults = KMeans.clusterData(documentResults, searcher, ranker.getClustering());
+               
+                if(ranker.getClustering().isCluster()){
+                	
+                	documentResults = KMeans.clusterData(analyzer,documentResults, searcher, ranker.getClustering());
+                }
+                    
 
                 resultsDocs = parseScoreDocs(searcher, documentResults, profile, date);
             } catch (org.apache.lucene.queryparser.classic.ParseException e) {
@@ -293,7 +296,7 @@ public class TwitterIndexer {
         query = queryBuilder.build();
         //query = parser.parse(line);
 
-
+        
         return query;
     }
 

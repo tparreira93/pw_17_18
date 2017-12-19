@@ -141,7 +141,7 @@ public class Main {
 	}
 
 	private static void printUsage() {
-		System.out.println("web search - Project\n");
+		System.out.println("Web Search - Project\n");
 		System.out.println("Usage example:");
 		System.out.println("[(-h|--help)] -f name -q name -e evaluation (-fusion | -nofusion) "
 				+ "-r [index (filter string | nothing(defaults to english analyzer))] .."
@@ -194,7 +194,7 @@ public class Main {
 		System.out.println("\t clusters int");
 		System.out.println("\t numClusteringDocs int");
 		System.out.println("-jaccard: Jaccard duplicate detection");
-		//System.out.println("\t threashold float");
+		//System.out.println("\t threshold float");
 	}
 
 	private static TestConfig parseConfig(String[] args) {
@@ -240,11 +240,14 @@ public class Main {
 					break;
 				case "-kmeans":
 					ClusteringOptions cluster = new ClusteringOptions();
+					
 					if (ranker != null) {
 						if (args.length - i >= 2) {
+								
 							cluster.setCluster(true);
 							cluster.setNumClusters(Integer.parseInt(args[++i]));
 							cluster.setNumClusteringDocs(Integer.parseInt(args[++i]));
+							
 						}
 						ranker.setClustering(cluster);
 					}
