@@ -116,9 +116,16 @@ public class TwitterIndexer {
         try {
             doc.add(new LongPoint("Id", status.getId()));
             doc.add(new StoredField("Id", status.getId()));
-            doc.add(new LongPoint("UserId", status.getUser().getId()));
+            doc.add(new StoredField("UserId", status.getUser().getId()));
             doc.add(new StringField("CreationDate", formatter.format(status.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()), Field.Store.YES));
             doc.add(new TextField("Body", status.getText(), Field.Store.YES));
+            doc.add(new StoredField("FollowersCount", status.getUser().getFollowersCount()));
+            doc.add(new StoredField("Verified", status.getUser().isVerified() ? 1 : 0));
+            doc.add(new StoredField("StatusesCount", status.getUser().getStatusesCount()));
+            if(status.getUser() != null && status.getUser().getDescription() != null &&  !status.getUser().getDescription().isEmpty())
+                doc.add(new TextField("UserDescription", status.getUser().getDescription(), Field.Store.YES));
+            if(status.getUser() != null && status.getUser().getName() != null &&  !status.getUser().getName().isEmpty())
+                doc.add(new TextField("UserName", status.getUser().getName(), Field.Store.YES));
 
             LocalDate date = status.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             for (Map.Entry<LocalDate, IndexWriter> entry : indexes.entrySet()) {
@@ -180,6 +187,7 @@ public class TwitterIndexer {
                 int resultsSize = SEARCH_RESULTS;
                 if(ranker.getClustering().isCluster())
                     resultsSize = ranker.getClustering().getNumClusteringDocs();
+                System.out.println("QUERY FINAL:" + profile.getTitle());
                 System.out.println("QUERY FINAL:" + query.toString());
                 TopDocs results = searcher.search(query, resultsSize);
 
@@ -277,6 +285,7 @@ public class TwitterIndexer {
         }
 
         int idx = 0;
+        assert expansionTerms != null;
         Collections.sort(expansionTerms);
         for (ExpansionTerm entry : expansionTerms) {
             if (queryTerms.contains(entry.getTerm())) {
@@ -373,15 +382,18 @@ public class TwitterIndexer {
         }
 
         for (ExpansionTerm entry : expansionTerms) {
-            //int docFreq = reader.docFreq(new Term("Body", entry.getKey()));
-            //int numDocs = reader.numDocs();
-            int docFreq = entry.getDocFreq();
-            int numDocs = topTerms.size();
+            int docFreq = reader.docFreq(new Term("Body", entry.getTerm()));
+            int numDocs = reader.numDocs();
+            long termFreq = reader.totalTermFreq(new Term("Body", entry.getTerm()));
+
+            //int docFreq = entry.getDocFreq();
+            //int numDocs = topTerms.size();
 
             Float idf = (float)Math.log((float)numDocs / (docFreq + 1));
             //topTerms.put(term, --termCount);
+            entry.setScore(termFreq * idf);
             //entry.setScore(entry.getTermFreq() * idf);
-            entry.setScore(entry.getTermFreq());
+            //entry.setScore(entry.getTermFreq());
         }
         return expansionTerms;
     }

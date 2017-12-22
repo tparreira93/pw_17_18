@@ -6,19 +6,20 @@
 __author__ = 'Luchen'
 import argparse
 import json
+import numpy
 import math
 
-#parser = argparse.ArgumentParser(description='Evaluation script for TREC 2016 RTS scenario B with batch NIST assessor judgments')
-#parser.add_argument('-q', required=True, metavar='qrels', help='batch qrels file')
-#parser.add_argument('-c', required=True, metavar='clusters', help='cluster anotations')
-#parser.add_argument('-t', required=True, metavar='tweetsdayepoch', help='tweets2dayepoch file')
-#parser.add_argument('-r', required=True, metavar='run', help='run file')
+parser = argparse.ArgumentParser(description='Evaluation script for TREC 2016 RTS scenario B with batch NIST assessor judgments')
+parser.add_argument('-q', required=True, metavar='qrels', help='batch qrels file')
+parser.add_argument('-c', required=True, metavar='clusters', help='cluster anotations')
+parser.add_argument('-t', required=True, metavar='tweetsdayepoch', help='tweets2dayepoch file')
+parser.add_argument('-r', required=True, metavar='run', help='run file')
 
-#args = parser.parse_args()
-qrels_path = "C:\\Users\\thales\\Google Drive\\Universidade\\6 Ano\\PW\\TwitterProject\\pw_2017_2018\\PW Project\\evaluation\\rts2016-qrels.txt"
-clusters_path = "C:\\Users\\thales\\Google Drive\\Universidade\\6 Ano\\PW\\TwitterProject\\pw_2017_2018\\PW Project\\evaluation\\rts2016-batch-clusters.json"
-file_tweet2day = "C:\\Users\\thales\\Google Drive\\Universidade\\6 Ano\\PW\\TwitterProject\\pw_2017_2018\\PW Project\\evaluation\\rts2016-batch-tweets2dayepoch.txt"
-run_path = "C:\\Users\\thales\\Google Drive\\Universidade\\6 Ano\\PW\\TwitterProject\\pw_2017_2018\\tmp.txt"
+args = parser.parse_args()
+qrels_path = vars(args)['q']
+clusters_path = vars(args)['c']
+file_tweet2day = vars(args)['t']
+run_path = vars(args)['r']
 
 K = 10
 days = []

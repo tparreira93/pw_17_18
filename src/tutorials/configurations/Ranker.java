@@ -3,6 +3,7 @@ package tutorials.configurations;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.search.similarities.Similarity;
+import tutorials.analyzer.CustomAnalyzer;
 import tutorials.analyzer.TestAnalyzer;
 import tutorials.rank.DailyDigest;
 
@@ -93,7 +94,8 @@ public class Ranker {
 
     public Analyzer getAnalyzer(){
         if(analyzerConfiguration.getFilters().size() == 0)
-            return new EnglishAnalyzer();
+            return new EnglishAnalyzer(AnalyzerConfiguration.stopSet);
+            //return new EnglishAnalyzer();
         return TestAnalyzer.getAnalyzer(this);
     }
 
