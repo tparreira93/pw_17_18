@@ -42,7 +42,8 @@ public class KMeans {
 
 			org.apache.lucene.document.Document s = searcher.doc(d.doc);
 			System.out.println("BEFORE STOP FILTER: " + s.getField("Body").stringValue());
-			String title = processedTweet(s.getField("Body").stringValue(), analyzer);
+			//String title = processedTweet(s.getField("Body").stringValue(), analyzer);
+			String title = s.getField("Body").stringValue().replaceAll("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "");
 			System.out.println("STOP FILTER: " + title);
 			System.out.println();
 			Document a = new Document(title);

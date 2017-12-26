@@ -19,8 +19,8 @@ import org.apache.lucene.search.ScoreDoc;
 
 public class Jaccard {
 
-	static List<String> s1 = new LinkedList<String>(Arrays.asList("teste", "documents"));
-	static List<String> s2 = new LinkedList<String>(Arrays.asList("teste2", "documents"));
+	 
+	
 
 	public static List<ScoreDoc> process(Analyzer analyzer, IndexSearcher searcher, List<ScoreDoc> docs)
 			throws IOException {
@@ -33,8 +33,10 @@ public class Jaccard {
 		while (temp.size() > 0) {
 
 			Document d = searcher.doc(temp.get(0).doc);
-			String sentence = d.getField("Body").stringValue();
-			StringReader reader = new StringReader(sentence);
+			System.out.println("JACCARD INICIAL: "+d.getField("Body").stringValue());
+			String sentence = d.getField("Body").stringValue().replaceAll("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "");
+			System.out.println("JACCARD FINAL: "+sentence);
+			StringReader reader = new StringReader(d.getField("Body").stringValue());
 			TokenStream tokenStream = analyzer.tokenStream("content", reader);
 			ShingleFilter sf = new ShingleFilter(tokenStream);
 
@@ -63,7 +65,7 @@ public class Jaccard {
 				sf.end();
 				sf.close();
 
-				if (similarity(s1, s2) > 0.8f) {
+				if (similarity(s1, s2) > 0.75f) {
 					temp.remove(i);
 				}
 			}
@@ -106,9 +108,5 @@ public class Jaccard {
 		return 1 - similarity(s1, s2);
 	}
 
-	public static void main(String[] args) {
 
-		System.out.println(distance(s1, s2));
-
-	}
 }
