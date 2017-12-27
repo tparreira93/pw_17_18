@@ -41,11 +41,8 @@ public class KMeans {
 		for (ScoreDoc d : docs) {
 
 			org.apache.lucene.document.Document s = searcher.doc(d.doc);
-			System.out.println("BEFORE STOP FILTER: " + s.getField("Body").stringValue());
-			//String title = processedTweet(s.getField("Body").stringValue(), analyzer);
-			String title = s.getField("Body").stringValue().replaceAll("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "");
-			System.out.println("STOP FILTER: " + title);
-			System.out.println();
+			String title = s.getField("Body").stringValue()
+					.replaceAll("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "");
 			Document a = new Document(title);
 			a.setField("IdLucene", d.doc);
 			double score = d.score;
@@ -55,11 +52,8 @@ public class KMeans {
 		}
 
 		b.documents = documents;
-		b.labelCount = 1;
+		// b.labelCount = 1;
 		// b.partitionCount = 4;
-
-		b.clusterCount = 10;
-
 		b.process();
 		List<Cluster> cluster = b.clusters;
 
@@ -85,15 +79,11 @@ public class KMeans {
 		List<ScoreDoc> results = new LinkedList<ScoreDoc>();
 		// System.out.println("\n");
 		for (Document d : best) {
-			System.out.println("FINAL \n");
-
-			System.out.println("Score: " + d.getScore() + " title: " + d.getTitle());
 			int id = 0;
-			try {
-				id = d.getField("IdLucene");
-			} catch (Exception e) {
-				;
-			}
+			id = d.getField("IdLucene");
+			/*
+			 * try { id = d.getField("IdLucene"); } catch (Exception e) { ; }
+			 */
 			results.add(new ScoreDoc(id, scores.get(id)));
 
 			Collections.sort(results, new Comparator<ScoreDoc>() {
@@ -117,32 +107,4 @@ public class KMeans {
 
 	}
 
-	private static String processedTweet(String tweet, Analyzer analyzer) throws IOException {
-		StringReader reader = new StringReader(tweet);
-		TokenStream tokenStream = analyzer.tokenStream("content", reader);
-		SnowballFilter sf = new SnowballFilter(tokenStream, "English");
-		List<String> temp = new LinkedList<String>();
-
-		CharTermAttribute charTermAttribute = sf.addAttribute(CharTermAttribute.class);
-		sf.reset();
-		while (sf.incrementToken()) {
-
-			temp.add(charTermAttribute.toString());
-
-		}
-
-		sf.end();
-		sf.close();
-
-		StringBuilder builder = new StringBuilder();
-
-		for (String string : temp) {
-			if (builder.length() > 0) {
-				builder.append(" ");
-			}
-			builder.append(string);
-		}
-
-		return builder.toString();
-	}
 }
