@@ -223,8 +223,8 @@ public class TwitterIndexer {
     }
 
     private List<ScoreDoc> nearDuplicateDetection(List<ScoreDoc> scoreDocs, Analyzer analyzer, IndexSearcher searcher, JaccardConfiguration jaccardConfiguration) throws IOException {
-    	
-        return Jaccard.process(analyzer,searcher,scoreDocs,jaccardConfiguration);
+    	Jaccard j =  new Jaccard(jaccardConfiguration.getSimilarity());
+        return j.process(analyzer, searcher, scoreDocs);
     }
 
     public void close() {
