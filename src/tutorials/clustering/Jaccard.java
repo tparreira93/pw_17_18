@@ -17,33 +17,32 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
 
+import tutorials.configurations.JaccardConfiguration;
+
 public class Jaccard {
 
-	 
-	
-
-	public static List<ScoreDoc> process(Analyzer analyzer, IndexSearcher searcher, List<ScoreDoc> docs)
-			throws IOException {
-
+	public static List<ScoreDoc> process(Analyzer analyzer, IndexSearcher searcher, List<ScoreDoc> docs,
+			JaccardConfiguration config) throws IOException {
+			
 		List<String> s1 = new LinkedList<String>();
 		List<String> s2 = new LinkedList<String>();
 		List<ScoreDoc> temp = docs;
 		List<ScoreDoc> tested = new LinkedList<ScoreDoc>();
-
+	
 		while (temp.size() > 0) {
 
 			Document d = searcher.doc(temp.get(0).doc);
-			System.out.println("JACCARD INICIAL: "+d.getField("Body").stringValue());
-			String sentence = d.getField("Body").stringValue().replaceAll("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "");
-			System.out.println("JACCARD FINAL: "+sentence);
-			StringReader reader = new StringReader(d.getField("Body").stringValue());
+			String sentence = d.getField("Body").stringValue()
+					.replaceAll("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "");
+
+			StringReader reader = new StringReader(sentence);
 			TokenStream tokenStream = analyzer.tokenStream("content", reader);
 			ShingleFilter sf = new ShingleFilter(tokenStream);
 
 			CharTermAttribute charTermAttribute = sf.addAttribute(CharTermAttribute.class);
 			sf.reset();
 			while (sf.incrementToken()) {
-			
+
 				s1.add(charTermAttribute.toString());
 
 			}
@@ -65,7 +64,7 @@ public class Jaccard {
 				sf.end();
 				sf.close();
 
-				if (similarity(s1, s2) > 0.75f) {
+				if (similarity(s1, s2) > config.getSimilarity()) {
 					temp.remove(i);
 				}
 			}
@@ -107,6 +106,5 @@ public class Jaccard {
 
 		return 1 - similarity(s1, s2);
 	}
-
 
 }

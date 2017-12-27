@@ -16,6 +16,7 @@ import org.apache.lucene.store.FSDirectory;
 import tutorials.clustering.Jaccard;
 import tutorials.clustering.KMeans;
 import tutorials.configurations.Expand;
+import tutorials.configurations.JaccardConfiguration;
 import tutorials.configurations.Ranker;
 import tutorials.rank.DailyDigest;
 import tutorials.rank.ProfileDigest;
@@ -194,7 +195,7 @@ public class TwitterIndexer {
                 List<ScoreDoc> documentResults = new ArrayList<>(Arrays.asList(results.scoreDocs));
 
                 if(ranker.getJaccard().isJaccard())
-                    documentResults = nearDuplicateDetection(documentResults,analyzer,searcher);
+                    documentResults = nearDuplicateDetection(documentResults,analyzer,searcher,ranker.getJaccard());
                
                 if(ranker.getClustering().isCluster()){
                 	
@@ -221,9 +222,9 @@ public class TwitterIndexer {
         return new ProfileDigest(profile, resultsDocs);
     }
 
-    private List<ScoreDoc> nearDuplicateDetection(List<ScoreDoc> scoreDocs, Analyzer analyzer, IndexSearcher searcher) throws IOException {
+    private List<ScoreDoc> nearDuplicateDetection(List<ScoreDoc> scoreDocs, Analyzer analyzer, IndexSearcher searcher, JaccardConfiguration jaccardConfiguration) throws IOException {
     	
-        return Jaccard.process(analyzer,searcher,scoreDocs);
+        return Jaccard.process(analyzer,searcher,scoreDocs,jaccardConfiguration);
     }
 
     public void close() {

@@ -389,12 +389,12 @@ public class Main {
 					if (ranker != null) {
 						ranker.setJaccard(jacc);
 					}
-					/*if (args.length - 1 >= 1) {
+					if (args.length - 1 >= 1) {
 						jacc.setSimilarity(Float.parseFloat(args[++i]));
 						if (ranker != null) {
 							ranker.setJaccard(jacc);
 						}
-					}*/
+					}
 					break;
 				case "-h":
 				case "--help":
