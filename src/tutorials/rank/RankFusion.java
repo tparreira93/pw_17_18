@@ -8,60 +8,65 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class RankFusion {
+    List<DailyDigest> digests = new ArrayList<>();
+
     public RankFusion() {
     }
 
-    public List<ResultDocs> Fuse(MultiRanker multiRanker, int top) {
+    public void addDigests(List<DailyDigest> digest) {
+        digests.addAll(digest);
+    }
+
+    public void addDigest(DailyDigest digest) {
+        digests.add(digest);
+    }
+
+
+    public List<ResultDocs> Fuse(float k, int top) {
         List<ResultDocs> result = new ArrayList<>();
-        float k = multiRanker.getK();
         Map<LocalDate, Object> dayDigests = new HashMap<>();
         Map<JSONProfile, Object> profileDocs;
         Map<Long, ResultDocs> docScores;
 
         // Le todas as datas dos digests
-        for (Ranker ranker : multiRanker.getRankers()) {
-            List<DailyDigest> digests = ranker.getDigests();
+        for (DailyDigest digest : digests) {
+            LocalDate date = digest.getDate();
+            List<ProfileDigest> profileDigests = digest.getDigests();
 
-            for (DailyDigest digest : digests) {
+            if (!dayDigests.containsKey(date)) {
+                profileDocs = new HashMap<>();
+                dayDigests.put(date, profileDocs);
+            }
+            else
+                profileDocs = (Map<JSONProfile, Object>) dayDigests.get(date);
 
-                LocalDate date = digest.getDate();
-                List<ProfileDigest> profileDigests = digest.getDigests();
+            // Percorre todos os profiles do dia
+            for (ProfileDigest profileDigest : profileDigests) {
+                JSONProfile profile = profileDigest.getProfile();
+                List<ResultDocs> resultDocs = profileDigest.getResultDocs();
 
-                if (!dayDigests.containsKey(date)) {
-                    profileDocs = new HashMap<>();
-                    dayDigests.put(date, profileDocs);
+                docScores = (Map<Long, ResultDocs>) profileDocs.get(profile);
+
+                if (docScores == null) {
+                    docScores = new HashMap<>();
+                    profileDocs.put(profile, docScores);
                 }
-                else
-                    profileDocs = (Map<JSONProfile, Object>) dayDigests.get(date);
 
-                // Percorre todos os profiles do dia
-                for (ProfileDigest profileDigest : profileDigests) {
-                    JSONProfile profile = profileDigest.getProfile();
-                    List<ResultDocs> resultDocs = profileDigest.getResultDocs();
+                // Cria os scores do reciprocal rank fusion
+                for (ResultDocs doc : resultDocs) {
+                    long docId = doc.getDocId();
+                    int rank = doc.getRank();
+                    float score = Math.round((1 / (k + rank)) * 1000000f) /1000000f;
 
-                    docScores = (Map<Long, ResultDocs>) profileDocs.get(profile);
-
-                    if (docScores == null) {
-                        docScores = new HashMap<>();
-                        profileDocs.put(profile, docScores);
+                    if(docScores.containsKey(docId))
+                    {
+                        ResultDocs s = docScores.get(docId);
+                        s.setScore(s.getScore() + score);
                     }
-
-                    // Cria os scores do reciprocal rank fusion
-                    for (ResultDocs doc : resultDocs) {
-                        long docId = doc.getDocId();
-                        int rank = doc.getRank();
-                        float score = Math.round((1 / (k + rank)) * 100f) /100f;
-
-                        if(docScores.containsKey(docId))
-                        {
-                            ResultDocs s = docScores.get(docId);
-                            s.setScore(s.getScore() + score);
-                        }
-                        else
-                        {
-                            ResultDocs res = new ResultDocs(doc.getQueryId(), doc.getDocId(), score, doc.getDoc(), 1, date);
-                            docScores.put(docId, res);
-                        }
+                    else
+                    {
+                        ResultDocs res = new ResultDocs(doc.getQueryId(), doc.getDocId(), score, doc.getDoc(), 1, date);
+                        docScores.put(docId, res);
                     }
                 }
             }

@@ -188,8 +188,8 @@ public class TwitterIndexer {
                 int resultsSize = SEARCH_RESULTS;
                 if(ranker.getClustering().isCluster())
                     resultsSize = ranker.getClustering().getNumClusteringDocs();
-                System.out.println("QUERY FINAL:" + profile.getTitle());
-                System.out.println("QUERY FINAL:" + query.toString());
+                //System.out.println("QUERY FINAL:" + profile.getTitle());
+                //System.out.println("QUERY FINAL:" + query.toString());
                 TopDocs results = searcher.search(query, resultsSize);
 
                 List<ScoreDoc> documentResults = new ArrayList<>(Arrays.asList(results.scoreDocs));

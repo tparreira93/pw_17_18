@@ -72,16 +72,7 @@ public class Main {
 						indexer.indexSearch(ranker, testConfig.getTestData());
 					}
 				}
-				List<ResultDocs> resultDocs;
-				if (multiRanker.isFusion()) {
-					System.out.println("");
-					System.out.println("Fusing scores of " + multiRanker.toString() + "...");
-
-					RankFusion fusion = new RankFusion();
-					resultDocs = fusion.Fuse(multiRanker, 10);
-				} else {
-					resultDocs = multiRanker.getResults(10);
-				}
+				List<ResultDocs> resultDocs = multiRanker.getResults(10);
 
 				DataSetTrec t = multiRanker.createTrec("tmp.txt", testConfig.getEvaluation(), resultDocs, run);
 				trecs.add(t);
@@ -158,6 +149,7 @@ public class Main {
 		System.out.println("-train: Use train profile");
 		System.out.println("\t filename");
 		System.out.println("-fusion: Rank fusion following ranks");
+		System.out.println("\t k value");
 		System.out.println("-nofusion: No fusion for following ranks");
 		System.out.println("Rank: -r indexName [index (filter string)]:");
 		System.out.println("-index: Create index");
@@ -195,6 +187,7 @@ public class Main {
 		System.out.println("\t numClusteringDocs int");
 		System.out.println("-jaccard: Jaccard duplicate detection");
 		//System.out.println("\t threshold float");
+		System.out.println("-mfields: Use multiple fields of tweet for ranking");
 	}
 
 	private static TestConfig parseConfig(String[] args) {
@@ -372,17 +365,22 @@ public class Main {
 						ranker.setSimilarityConfigurations(new LMJelinekMercerSimilarity(lambda));
 					}
 					break;
-				case "-expand":
-					Expand exp = new Expand(0.5, true);
-					if (args.length - 1 >= 3) {
-						exp.setNumTerms(Integer.parseInt(args[++i]));
-						exp.setNumExpansionDocs(Integer.parseInt(args[++i]));
-						exp.setWeight(Float.parseFloat(args[++i]));
-						if (ranker != null) {
-							ranker.setExpand(exp);
+					case "-expand":
+						Expand exp = new Expand(0.5, true);
+						if (args.length - 1 >= 3) {
+							exp.setNumTerms(Integer.parseInt(args[++i]));
+							exp.setNumExpansionDocs(Integer.parseInt(args[++i]));
+							exp.setWeight(Float.parseFloat(args[++i]));
+							if (ranker != null) {
+								ranker.setExpand(exp);
+							}
 						}
-					}
 					break;
+					case "-mfields":
+						if (ranker != null) {
+							ranker.setMultipleFields(true);
+						}
+						break;
 				case "-jaccard":
 					JaccardConfiguration jacc = new JaccardConfiguration();
 					jacc.setJaccard(true);
