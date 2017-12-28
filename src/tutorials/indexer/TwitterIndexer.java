@@ -184,7 +184,7 @@ public class TwitterIndexer {
             searcher.setSimilarity(similarity);
             Query query;
             try {
-                query = createQuery(profile.getTitle(), date, ranker.getExpand(), analyzer, searcher, reader);
+                query = createQuery(profile.getTitle(), ranker.isMultipleFields(), date, ranker.getExpand(), analyzer, searcher, reader);
                 int resultsSize = SEARCH_RESULTS;
                 if(ranker.getClustering().isCluster())
                     resultsSize = ranker.getClustering().getNumClusteringDocs();
@@ -238,12 +238,16 @@ public class TwitterIndexer {
         }
     }
 
-    private Query createQuery(String queryText, LocalDate date, Expand expand, Analyzer analyzer, IndexSearcher searcher, IndexReader reader) throws ParseException, IOException {
+    private Query createQuery(String queryText, boolean boostVerified, LocalDate date, Expand expand, Analyzer analyzer, IndexSearcher searcher, IndexReader reader) throws ParseException, IOException {
         Query query;
         QueryParser parser = new QueryParser("Body", analyzer);
 
         BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
         queryBuilder.add(new TermQuery(new Term("CreationDate", formatter.format(date))), BooleanClause.Occur.MUST);
+
+        if(boostVerified)
+            queryBuilder.add(new BoostQuery(new TermQuery(new Term("Verified", "1")), 2), BooleanClause.Occur.SHOULD);
+
         if (expand.isExpand())
             queryBuilder.add(expandQuery(queryText, searcher, reader, analyzer, expand), BooleanClause.Occur.SHOULD);
         else {

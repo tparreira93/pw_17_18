@@ -54,18 +54,15 @@ public class Ranker {
             for (DailyDigest day : dailyDigests) {
                 for (ProfileDigest digest : day.getDigests()) {
                     List<ResultDocs> resultsFollowers = new ArrayList<>();
-                    List<ResultDocs> resultsVerified = new ArrayList<>();
                     List<ResultDocs> resultsStatusCount = new ArrayList<>();
 
                     int i = 1;
                     for (ResultDocs result : digest.getResultDocs()) {
                         Document doc = result.getDoc();
                         int followers = doc.getField("FollowersCount").numericValue().intValue();
-                        int verified = doc.getField("Verified").numericValue().intValue();
                         int statusCount = doc.getField("StatusesCount").numericValue().intValue();
 
                         resultsFollowers.add(new ResultDocs(digest.getProfile().getTopicID(), result.getDocId(), followers, doc, 1, result.getDate()));
-                        resultsVerified.add(new ResultDocs(digest.getProfile().getTopicID(), result.getDocId(), verified, doc, 1, result.getDate()));
                         resultsStatusCount.add(new ResultDocs(digest.getProfile().getTopicID(), result.getDocId(), statusCount, doc, 1, result.getDate()));
 
                         if(i == top)
@@ -76,15 +73,11 @@ public class Ranker {
                     Collections.sort(resultsFollowers);
                     for (i = 0; i < resultsFollowers.size(); i++)
                         resultsFollowers.get(i).setRank(i+1);
-                    Collections.sort(resultsVerified);
-                    for (i = 0; i < resultsVerified.size(); i++)
-                        resultsVerified.get(i).setRank(i+1);
                     Collections.sort(resultsStatusCount);
                     for (i = 0; i < resultsStatusCount.size(); i++)
                         resultsStatusCount.get(i).setRank(i+1);
 
                     digest.getResultDocs().addAll(resultsFollowers);
-                    digest.getResultDocs().addAll(resultsVerified);
                     digest.getResultDocs().addAll(resultsStatusCount);
                 }
             }
