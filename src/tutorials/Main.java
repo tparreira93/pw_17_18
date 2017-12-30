@@ -186,7 +186,7 @@ public class Main {
 		System.out.println("\t clusters int");
 		System.out.println("\t numClusteringDocs int");
 		System.out.println("-jaccard: Jaccard duplicate detection");
-		//System.out.println("\t threshold float");
+		System.out.println("\t similarity float");
 		System.out.println("-mfields: Use multiple fields of tweet for ranking");
 	}
 
