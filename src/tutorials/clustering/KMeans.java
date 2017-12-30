@@ -36,7 +36,7 @@ public class KMeans {
 		List<Document> documents = new LinkedList<>();
 
 		Map<Integer, Float> scores = new HashMap<>();
-		System.out.println("KMEANS " + docs.size() + "//\n\n");
+	
 
 		for (ScoreDoc d : docs) {
 
@@ -102,7 +102,6 @@ public class KMeans {
 			});
 		}
 
-		System.out.println("KMEANS FINISHED " + results.size() + "//\n\n");
 		return results;
 
 	}
